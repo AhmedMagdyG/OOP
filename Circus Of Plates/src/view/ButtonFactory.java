@@ -88,6 +88,8 @@ public class ButtonFactory {
 	            }
 	        });
 			break;
+		default:
+			throw new IllegalStateException();
 		}
 		return curBtn;
 	}
