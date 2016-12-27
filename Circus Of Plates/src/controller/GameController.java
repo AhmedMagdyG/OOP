@@ -43,4 +43,9 @@ public class GameController {
 		
 	}
 
+	public void ChangeSettings() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

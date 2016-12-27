@@ -1,8 +1,6 @@
 package view;
 
 import controller.GameController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -41,52 +39,22 @@ public class ButtonFactory {
 		Button curBtn = new Button(btnName[index]);
 		switch(index){
 		case NEW:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().newGame();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().newGame());
 			break;
 		case PAUSE:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().pauseGame();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().pauseGame());
 			break;
 		case RESUME:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().resumeGame();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().resumeGame());
 			break;
 		case QUIT:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().quit();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().quit());
 			break;
 		case SAVE:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().save();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().save());
 			break;
 		case LOAD:
-			curBtn.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent event) {
-	                GameController.getInstance().load();
-	            }
-	        });
+			curBtn.setOnAction(e -> GameController.getInstance().load());
 			break;
 		default:
 			throw new IllegalStateException();
