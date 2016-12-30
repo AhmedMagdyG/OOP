@@ -15,7 +15,7 @@ public class GraphicsDrawer {
 	
 	public GraphicsDrawer(Canvas gameCanvas) {
 		this.gameCanvas = gameCanvas;
-		this.backGround = new Image(new File("res/background.jpg").toURI().toString());
+		this.backGround = new Image(new File("res" + File.separator +"background.jpg").toURI().toString());
 	}
 
 	public void draw() {
