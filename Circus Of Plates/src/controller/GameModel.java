@@ -9,7 +9,6 @@ public class GameModel {
 	}
 
 	public void updateData() {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -33,13 +33,11 @@ public class GameController extends AnimationTimer {
 	}
 
 	public void pauseGame() {
-		// TODO Auto-generated method stub
-		
+		stop();
 	}
 
 	public void resumeGame() {
-		// TODO Auto-generated method stub
-		
+		start();
 	}
 
 	public void load() {
@@ -56,5 +54,4 @@ public class GameController extends AnimationTimer {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
