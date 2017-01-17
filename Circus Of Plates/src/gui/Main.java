@@ -1,16 +1,21 @@
-package view;
+package gui;
 
-import controller.GameModel;
+import javafx.event.EventHandler;
+import controller.GameController;
 import javafx.application.Application;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
+import model.GameModel;
+import view.GraphicsDrawer;
 
 public class Main extends Application {
 
 	private static final int WIDTH = 950, HEIGH = 630;
 	private static final int CANVAS_WIDTH = 950, CANVAS_HEIGH = 600;
+	private static final int PLAYER_COUNT = 2;
 
 	private Canvas gameCanvas;
 	private GameController gameController;
@@ -28,12 +33,22 @@ public class Main extends Application {
 		initialiseGame(gameCanvas);
 		SplitPane layout = new GameLayout(gameCanvas, gameController);
 		Scene gameScene = new Scene(layout, WIDTH, HEIGH);
+		move(gameScene);
 		setStageProperties(gameStage, gameScene);
+	}
+	
+	void move(Scene gameScene) {
+		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                gameController.moveAvatars(event.getCode().toString());
+            }
+        });
 	}
 
 	void initialiseGame(Canvas gameCanvas) {
 		graphicsDrawer = new GraphicsDrawer(gameCanvas);
-		gameModel = GameModel.getInstance();
+		gameModel = new GameModel(PLAYER_COUNT);
 		gameController = new GameController(graphicsDrawer, gameModel);
 	}
 

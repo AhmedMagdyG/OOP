@@ -1,5 +1,6 @@
-package view;
+package gui;
 
+import controller.GameController;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;

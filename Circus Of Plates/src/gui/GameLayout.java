@@ -1,7 +1,8 @@
-package view;
+package gui;
 
 import java.util.ArrayList;
 
+import controller.GameController;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;

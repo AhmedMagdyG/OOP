@@ -3,6 +3,8 @@ package shapes;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import model.Sprite;
+import model.SpriteShape;
 
 public class RectangleShape extends CustomShape {
 
@@ -31,9 +33,9 @@ public class RectangleShape extends CustomShape {
 	}
 
 	@Override
-	public com.sun.javafx.geom.Shape impl_configShape() {
-		// TODO Auto-generated method stub
-		return null;
+	public Sprite getSprite() {
+		return new SpriteShape(super.xPosition, super.yPosition, width, height, super.color);
 	}
+
 
 }

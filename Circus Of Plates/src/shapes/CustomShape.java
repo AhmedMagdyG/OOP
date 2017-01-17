@@ -2,12 +2,14 @@ package shapes;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+import model.Sprite;
 
-public abstract class CustomShape extends Shape {
+public abstract class CustomShape {
 
 	protected Color color;
 	protected int xPosition, yPosition;
 	protected boolean availability;
+	
 	
 	
 	public CustomShape(Color color) {
@@ -15,6 +17,8 @@ public abstract class CustomShape extends Shape {
 	}
 	
 	public abstract Shape getShape();
+	
+	public abstract Sprite getSprite();
 	
 	public void setXPostion(int xPosition) {
 		this.xPosition = xPosition;
