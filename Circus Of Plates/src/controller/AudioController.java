@@ -8,11 +8,24 @@ import javafx.scene.media.MediaPlayer;
 
 public class AudioController {
 	private static final String BACKGROUND_MUSIC = "background_Music.mp3";
+	private Media backgroundMusic;
+	private MediaPlayer player;
+
+	public AudioController() {
+		backgroundMusic = new Media(Paths.get("res" + File.separator + BACKGROUND_MUSIC).toUri().toString());
+	}
 
 	public void playBackgroundMusic() {
-		Media backgroundMusic = new Media(Paths.get("res" + File.separator + BACKGROUND_MUSIC).toUri().toString());
-		MediaPlayer player = new MediaPlayer(backgroundMusic);
+		player = new MediaPlayer(backgroundMusic);
 		player.setCycleCount(MediaPlayer.INDEFINITE);
+		player.play();
+	}
+
+	public void pauseBackgroundMusic() {
+		player.pause();
+	}
+
+	public void resumeBackgroundMusic() {
 		player.play();
 	}
 }

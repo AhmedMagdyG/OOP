@@ -94,10 +94,12 @@ public class GameController extends AnimationTimer {
 	}
 
 	public void pauseGame() {
+		audioController.pauseBackgroundMusic();
 		stop();
 	}
 
 	public void resumeGame() {
+		audioController.resumeBackgroundMusic();
 		start();
 	}
 
