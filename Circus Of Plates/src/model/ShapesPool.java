@@ -54,4 +54,8 @@ public class ShapesPool {
 		return false;
 	}
 
+	public List<CustomShape> getInUse() {
+		return inUse;
+	}
+
 }

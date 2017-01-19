@@ -14,7 +14,7 @@ import view.GraphicsDrawer;
 public class Main extends Application {
 
 	private static final int WIDTH = 950, HEIGH = 630;
-	private static final int CANVAS_WIDTH = 950, CANVAS_HEIGH = 600;
+	public static final int CANVAS_WIDTH = 950, CANVAS_HEIGH = 600;
 	private static final int PLAYER_COUNT = 2;
 
 	private Canvas gameCanvas;
@@ -36,14 +36,14 @@ public class Main extends Application {
 		move(gameScene);
 		setStageProperties(gameStage, gameScene);
 	}
-	
+
 	void move(Scene gameScene) {
 		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                gameController.moveAvatars(event.getCode().toString());
-            }
-        });
+			@Override
+			public void handle(KeyEvent event) {
+				gameController.moveAvatars(event.getCode().toString());
+			}
+		});
 	}
 
 	void initialiseGame(Canvas gameCanvas) {

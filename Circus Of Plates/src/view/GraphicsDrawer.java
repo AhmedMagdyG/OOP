@@ -15,12 +15,6 @@ public class GraphicsDrawer {
 	private static final int STAND_HEIGHT = 585;
 	private static final int STAND_WIDTH = 950;
 
-	private static final int RAIL_THICKNESS = 10;
-	private static final int RAIL_HEIGHT = 40;
-	private static final int RAIL_WIDTH = 200;
-
-	private static final int CANVAS_WIDTH = 950;
-
 	private Canvas gameCanvas;
 	private Image backGround;
 
@@ -42,8 +36,5 @@ public class GraphicsDrawer {
 		g.drawImage(backGround, 0, 0);
 		g.setFill(Color.BLACK);
 		g.fillRect(0, STAND_HEIGHT, STAND_WIDTH, STAND_THICKNESS);
-		g.setFill(Color.BLUE);
-		g.fillRect(0, RAIL_HEIGHT, RAIL_WIDTH, RAIL_THICKNESS);
-		g.fillRect(CANVAS_WIDTH - RAIL_WIDTH, RAIL_HEIGHT, RAIL_WIDTH, RAIL_THICKNESS);
 	}
 }

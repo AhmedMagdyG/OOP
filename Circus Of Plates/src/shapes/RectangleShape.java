@@ -9,8 +9,8 @@ import model.SpriteShape;
 public class RectangleShape extends CustomShape {
 
 	protected int width, height;
-	protected Rectangle rectangle; 
-	
+	protected Rectangle rectangle;
+
 	public RectangleShape(int width, int height, Color color) {
 		super(color);
 		this.width = width;
@@ -20,12 +20,12 @@ public class RectangleShape extends CustomShape {
 		rectangle.setWidth(this.width);
 		rectangle.setHeight(this.height);
 	}
-	
-	public Shape getShape() { 
+
+	public Shape getShape() {
 		updateRectangle();
 		return this.rectangle;
 	}
-	
+
 	private void updateRectangle() {
 		rectangle.setX(super.xPosition);
 		rectangle.setY(super.yPosition);
@@ -37,5 +37,14 @@ public class RectangleShape extends CustomShape {
 		return new SpriteShape(super.xPosition, super.yPosition, width, height, super.color);
 	}
 
+	@Override
+	public int getWidth() {
+		return (int) rectangle.getWidth();
+	}
+
+	@Override
+	public int getHeight() {
+		return (int) rectangle.getHeight();
+	}
 
 }

@@ -5,50 +5,61 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import model.GameModel;
 import model.Sprite;
+import rail.ShapesController;
+import shapes.CustomShape;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
 
 	private GraphicsDrawer graphicsDrawer;
 	private GameModel gameModel;
-	
+	private ShapesController shapesController;
+
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
 	private final static int MOVED_DISTANCE = 5;
-	
-	
-	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameController) {
+	private final static long SHAPE_CYCLE = 2000;
+	private long prevCycleTime;
+
+	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameModel) {
 		this.graphicsDrawer = graphicsDrawer;
-		this.gameModel = gameController;
+		this.gameModel = gameModel;
+		this.shapesController = new ShapesController(this);
+		this.prevCycleTime = System.currentTimeMillis();
 	}
-	
+
 	@Override
 	public void handle(long now) {
+		if (System.currentTimeMillis() - prevCycleTime > SHAPE_CYCLE) {
+			shapesController.startNewShape();
+			prevCycleTime = System.currentTimeMillis();
+		}
+		shapesController.moveShapes();
 		handleMotion();
 		gameModel.updateData();
 		ArrayList<Sprite> sprites = gameModel.getSprites();
 		graphicsDrawer.draw(sprites);
 	}
-	
+
 	private void handleMotion() {
-		if(avatarOneToleft) {
+		if (avatarOneToleft) {
 			gameModel.movePlayer(FIRST_AVATAR, -MOVED_DISTANCE);
 			avatarOneToleft = false;
 		}
-		if(avatarOneToRight) {
+		if (avatarOneToRight) {
 			gameModel.movePlayer(FIRST_AVATAR, MOVED_DISTANCE);
 			avatarOneToRight = false;
 		}
-		if(avatarTwoToLeft) {
+		if (avatarTwoToLeft) {
 			gameModel.movePlayer(SECOND_AVATAR, -MOVED_DISTANCE);
 			avatarTwoToLeft = false;
 		}
-		if(avatarTwoToRight) {
+		if (avatarTwoToRight) {
 			gameModel.movePlayer(SECOND_AVATAR, MOVED_DISTANCE);
 			avatarTwoToRight = false;
 		}
 	}
-	
+
 	public void moveAvatars(String direction) {
 		switch (direction) {
 		case "LEFT":
@@ -68,7 +79,7 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	public void newGame(){
+	public void newGame() {
 		System.out.println("NEW GAME CLICk");
 	}
 
@@ -78,7 +89,7 @@ public class GameController extends AnimationTimer {
 
 	public void quit() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void pauseGame() {
@@ -91,13 +102,16 @@ public class GameController extends AnimationTimer {
 
 	public void load() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void ChangeSettings() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+	public GameModel getGameModel() {
+		return gameModel;
+	}
+
 }
