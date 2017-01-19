@@ -1,9 +1,9 @@
-package shapes;
+package controller;
 
-import controller.GameController;
 import gui.Main;
 import model.Util;
 import rail.Rail;
+import shapes.CustomShape;
 
 public class ShapesController {
 	private GameController gameController;

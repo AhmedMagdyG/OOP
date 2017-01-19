@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import model.GameModel;
 import model.Sprite;
-import shapes.ShapesController;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
@@ -13,6 +12,7 @@ public class GameController extends AnimationTimer {
 	private GraphicsDrawer graphicsDrawer;
 	private GameModel gameModel;
 	private ShapesController shapesController;
+	private AudioController audioController;
 
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
@@ -25,6 +25,8 @@ public class GameController extends AnimationTimer {
 		this.gameModel = gameModel;
 		this.shapesController = new ShapesController(this);
 		this.prevCycleTime = System.currentTimeMillis();
+		this.audioController = new AudioController();
+		audioController.playBackgroundMusic();
 	}
 
 	@Override
