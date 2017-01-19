@@ -7,9 +7,9 @@ import model.Sprite;
 public abstract class CustomShape {
 
 	protected Color color;
-	protected int xPosition, yPosition;
-	protected int xVelocity;
-	protected int yVelocity;
+	protected double xPosition, yPosition;
+	protected double xVelocity;
+	protected double yVelocity;
 
 	public CustomShape(Color color) {
 		this.color = color;
@@ -19,19 +19,19 @@ public abstract class CustomShape {
 
 	public abstract Sprite getSprite();
 
-	public void setXPostion(int xPosition) {
+	public void setXPostion(double xPosition) {
 		this.xPosition = xPosition;
 	}
 
-	public void setYPostion(int yPosition) {
+	public void setYPostion(double yPosition) {
 		this.yPosition = yPosition;
 	}
 
-	public int getXPosition() {
+	public double getXPosition() {
 		return this.xPosition;
 	}
 
-	public int getYPosition() {
+	public double getYPosition() {
 		return this.yPosition;
 	}
 
@@ -43,28 +43,35 @@ public abstract class CustomShape {
 		return this.color;
 	}
 
-	public void moveXDirection(int dx) {
+	public void moveXDirection(double dx) {
 		this.xPosition += dx;
 	}
 
-	public void moveYDirection(int dy) {
+	public void moveYDirection(double dy) {
 		this.yPosition += dy;
 	}
 
-	public void setXVelocity(int xVelocity) {
+	public void setXVelocity(double xVelocity) {
 		this.xVelocity = xVelocity;
 	}
 
-	public void setYVelocity(int yVelocity) {
+	public void setYVelocity(double yVelocity) {
 		this.yVelocity = yVelocity;
 	}
 
-	public int getYVelocity() {
+	public double getYVelocity() {
 		return yVelocity;
 	}
 
-	public int getXVelocity() {
+	public double getXVelocity() {
 		return xVelocity;
+	}
+
+	public void resetMotion() {
+		this.xPosition = 0;
+		this.yPosition = 0;
+		this.xVelocity = 0;
+		this.yVelocity = 0;
 	}
 
 	public abstract int getWidth();

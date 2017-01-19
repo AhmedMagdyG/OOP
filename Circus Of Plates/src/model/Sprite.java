@@ -5,10 +5,10 @@ import javafx.scene.image.Image;
 
 public abstract class Sprite {
 
-	protected int x, y;
+	protected double x, y;
 	protected Image spriteImage;
 
-	public Sprite(int x, int y) {
+	public Sprite(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

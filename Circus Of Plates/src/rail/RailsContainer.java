@@ -2,7 +2,8 @@ package rail;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import model.Util;
 
 public class RailsContainer {
 	private List<Rail> rails;
@@ -22,7 +23,7 @@ public class RailsContainer {
 		if (rails.isEmpty()) {
 			return null;
 		} else {
-			return rails.get(new Random().nextInt(rails.size()));
+			return rails.get(Util.RANDOM_GENERATOR.nextInt(rails.size()));
 		}
 	}
 

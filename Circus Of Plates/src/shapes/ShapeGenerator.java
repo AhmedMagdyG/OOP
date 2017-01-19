@@ -1,9 +1,9 @@
 package shapes;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import javafx.scene.paint.Color;
+import model.Util;
 
 public class ShapeGenerator {
 
@@ -33,10 +33,9 @@ public class ShapeGenerator {
 	}
 
 	public CustomShape getShape() {
-		Random random = new Random();
 		int[] dimensions;
-		int shapeType = random.nextInt(ShapeFactory.getLoadedShapesCount());
-		int colorIndex = random.nextInt(colors.size());
+		int shapeType = Util.RANDOM_GENERATOR.nextInt(ShapeFactory.getLoadedShapesCount());
+		int colorIndex = Util.RANDOM_GENERATOR.nextInt(colors.size());
 		if (shapeType == 0) {
 			dimensions = new int[] { 40, 15 };
 		} else {

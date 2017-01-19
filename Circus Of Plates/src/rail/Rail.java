@@ -66,12 +66,12 @@ public class Rail {
 	 * @param shape
 	 *            The shape to be added to the rail.
 	 */
-	public void putShapeOnRail(CustomShape shape, int velocity) {
+	public void putShapeOnRail(CustomShape shape, double velocity) {
 		if (this.direction == Allign.LEFT_ALLIGN) {
 			shape.setXPostion(this.getStartX() - shape.getWidth());
 			shape.setXVelocity(velocity);
 		} else {
-			shape.setXPostion(this.getEndX());
+			shape.setXPostion(this.getStartX());
 			shape.setXVelocity(-velocity);
 		}
 		shape.setYPostion(this.getHeight() - shape.getHeight());

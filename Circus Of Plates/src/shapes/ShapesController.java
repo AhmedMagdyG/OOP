@@ -1,16 +1,15 @@
-package rail;
-
-import java.util.Random;
+package shapes;
 
 import controller.GameController;
 import gui.Main;
-import shapes.CustomShape;
+import model.Util;
+import rail.Rail;
 
 public class ShapesController {
 	private GameController gameController;
-	private static final int VELOCITY_MAX_VALUE = 20;
-	private static final int VELOCITY_MIN_VALUE = 1;
-	private static final int GRAVITY = 1;
+	private static final int VELOCITY_MAX_VALUE = 25;
+	private static final int VELOCITY_MIN_VALUE = 3;
+	private static final double GRAVITY = 0.5;
 
 	public ShapesController(GameController gameController) {
 		this.gameController = gameController;
@@ -31,7 +30,9 @@ public class ShapesController {
 		if (rail == null) {
 			throw new RuntimeException("Empty Rails set!");
 		}
-		int velocity = VELOCITY_MIN_VALUE + new Random().nextInt(VELOCITY_MAX_VALUE - VELOCITY_MIN_VALUE + 1);
+		double velocity = VELOCITY_MIN_VALUE
+				+ Util.RANDOM_GENERATOR.nextDouble() * (VELOCITY_MAX_VALUE - VELOCITY_MIN_VALUE + 1);
+		shapeToStart.resetMotion();
 		rail.putShapeOnRail(shapeToStart, velocity);
 		return true;
 	}
@@ -49,6 +50,7 @@ public class ShapesController {
 					shape.moveYDirection(shape.getYVelocity());
 				}
 				if (shape.getYPosition() > Main.CANVAS_HEIGH) {
+					gameController.getGameModel().getShapesPool().releaseShape(rail.getShapes().get(index));
 					rail.removeShape(index--);
 				}
 			}

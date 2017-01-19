@@ -34,7 +34,7 @@ public class ShapesPool {
 		for (int index = 0; index < inUse.size(); index++) {
 			if (inUse.get(index) == expiredShape) {
 				available.add(inUse.get(index));
-				inUse.remove(index);
+				inUse.remove(index--);
 				expiredShape = null;
 				return true;
 			}
@@ -46,7 +46,7 @@ public class ShapesPool {
 		for (int index = 0; index < available.size(); index++) {
 			if (availableShape == available.get(index)) {
 				inUse.add(available.get(index));
-				available.remove(index);
+				available.remove(index--);
 				availableShape = null;
 				return true;
 			}

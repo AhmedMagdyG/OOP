@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import model.GameModel;
 import model.Sprite;
-import rail.ShapesController;
-import shapes.CustomShape;
+import shapes.ShapesController;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
@@ -18,7 +17,7 @@ public class GameController extends AnimationTimer {
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
 	private final static int MOVED_DISTANCE = 5;
-	private final static long SHAPE_CYCLE = 2000;
+	private final static long SHAPE_CYCLE = 500;
 	private long prevCycleTime;
 
 	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameModel) {

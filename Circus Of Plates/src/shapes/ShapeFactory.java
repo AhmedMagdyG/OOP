@@ -9,30 +9,30 @@ import javafx.scene.paint.Color;
 public class ShapeFactory {
 
 	private static final int EQUAL_PARAMETERS = 2, VARIED_PARAMETERS = 3;
-	
+
 	private static ArrayList<Constructor<?>[]> loadedShapes = null;
-	
+
 	public ShapeFactory() {
-		if(loadedShapes == null) {
+		if (loadedShapes == null) {
 			loadedShapes = new ArrayList<Constructor<?>[]>();
 		}
 		ShapeFactory.addNewShape(RectangleShape.class.getConstructors());
 	}
-	
-	public static void addNewShape(Constructor<?>[] newShapeConstructor) { 
+
+	public static void addNewShape(Constructor<?>[] newShapeConstructor) {
 		int length = loadedShapes.size();
-		for(int i = 0; i < length; i++) {
-			if(loadedShapes.get(i).equals(newShapeConstructor)) {
+		for (int i = 0; i < length; i++) {
+			if (loadedShapes.get(i).equals(newShapeConstructor)) {
 				return;
 			}
 		}
 		loadedShapes.add(newShapeConstructor);
 	}
-	
+
 	public static int getLoadedShapesCount() {
 		return ShapeFactory.loadedShapes.size();
 	}
-	
+
 	public CustomShape getObject(int requiredShape, int[] dimensions, Color color) {
 		if (requiredShape >= loadedShapes.size()) {
 			return null;
@@ -48,7 +48,7 @@ public class ShapeFactory {
 		}
 		return null;
 	}
-	
+
 	private Object getReqShape(Constructor<?> constructor, int[] dimensions, Color color)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int parametersLength = constructor.getParameterCount();
