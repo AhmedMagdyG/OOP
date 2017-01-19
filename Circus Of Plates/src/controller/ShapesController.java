@@ -1,6 +1,5 @@
 package controller;
 
-import gui.Main;
 import model.Util;
 import rail.Rail;
 import shapes.CustomShape;
@@ -49,7 +48,7 @@ public class ShapesController {
 					shape.setYVelocity(shape.getYVelocity() + GRAVITY);
 					shape.moveYDirection(shape.getYVelocity());
 				}
-				if (shape.getYPosition() > Main.CANVAS_HEIGH) {
+				if (shape.getYPosition() > Util.CANVAS_HEIGH) {
 					gameController.getGameModel().getShapesPool().releaseShape(rail.getShapes().get(index));
 					rail.removeShape(index--);
 				}

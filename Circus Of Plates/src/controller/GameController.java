@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.input.KeyCode;
 import model.GameModel;
 import model.Sprite;
 import view.GraphicsDrawer;
@@ -16,8 +17,8 @@ public class GameController extends AnimationTimer {
 
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
-	private final static int MOVED_DISTANCE = 5;
-	private final static long SHAPE_CYCLE = 500;
+	private final static int MOVED_DISTANCE = 15;
+	private final static long SHAPE_CYCLE = 100;
 	private long prevCycleTime;
 
 	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameModel) {
@@ -45,35 +46,50 @@ public class GameController extends AnimationTimer {
 	private void handleMotion() {
 		if (avatarOneToleft) {
 			gameModel.movePlayer(FIRST_AVATAR, -MOVED_DISTANCE);
-			avatarOneToleft = false;
 		}
 		if (avatarOneToRight) {
 			gameModel.movePlayer(FIRST_AVATAR, MOVED_DISTANCE);
-			avatarOneToRight = false;
 		}
 		if (avatarTwoToLeft) {
 			gameModel.movePlayer(SECOND_AVATAR, -MOVED_DISTANCE);
-			avatarTwoToLeft = false;
 		}
 		if (avatarTwoToRight) {
 			gameModel.movePlayer(SECOND_AVATAR, MOVED_DISTANCE);
-			avatarTwoToRight = false;
 		}
 	}
 
-	public void moveAvatars(String direction) {
-		switch (direction) {
-		case "LEFT":
+	public void moveAvatars(KeyCode keyCode) {
+		switch (keyCode) {
+		case LEFT:
 			avatarOneToleft = true;
 			break;
-		case "RIGHT":
+		case RIGHT:
 			avatarOneToRight = true;
 			break;
-		case "A":
+		case A:
 			avatarTwoToLeft = true;
 			break;
-		case "D":
+		case D:
 			avatarTwoToRight = true;
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void stopMovingAvatars(KeyCode keyCode) {
+		switch (keyCode) {
+		case LEFT:
+			avatarOneToleft = false;
+			break;
+		case RIGHT:
+			avatarOneToRight = false;
+			break;
+		case A:
+			avatarTwoToLeft = false;
+			break;
+		case D:
+			avatarTwoToRight = false;
 			break;
 		default:
 			break;

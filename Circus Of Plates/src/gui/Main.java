@@ -9,13 +9,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 import model.GameModel;
+import model.Util;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
-
-	private static final int WIDTH = 950, HEIGH = 630;
-	public static final int CANVAS_WIDTH = 950, CANVAS_HEIGH = 600;
-	private static final int PLAYER_COUNT = 2;
 
 	private Canvas gameCanvas;
 	private GameController gameController;
@@ -29,10 +26,10 @@ public class Main extends Application {
 	}
 
 	private void initialize(Stage gameStage) {
-		gameCanvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGH);
+		gameCanvas = new Canvas(Util.CANVAS_WIDTH, Util.CANVAS_HEIGH);
 		initialiseGame(gameCanvas);
 		SplitPane layout = new GameLayout(gameCanvas, gameController);
-		Scene gameScene = new Scene(layout, WIDTH, HEIGH);
+		Scene gameScene = new Scene(layout, Util.SCENE_WIDTH, Util.SCENE_HEIGH);
 		move(gameScene);
 		setStageProperties(gameStage, gameScene);
 	}
@@ -41,14 +38,20 @@ public class Main extends Application {
 		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				gameController.moveAvatars(event.getCode().toString());
+				gameController.moveAvatars(event.getCode());
+			}
+		});
+		gameScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				gameController.stopMovingAvatars(event.getCode());
 			}
 		});
 	}
 
 	void initialiseGame(Canvas gameCanvas) {
 		graphicsDrawer = new GraphicsDrawer(gameCanvas);
-		gameModel = new GameModel(PLAYER_COUNT);
+		gameModel = new GameModel(Util.PLAYER_COUNT);
 		gameController = new GameController(graphicsDrawer, gameModel);
 	}
 
