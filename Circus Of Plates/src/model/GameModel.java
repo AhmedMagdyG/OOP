@@ -50,7 +50,11 @@ public class GameModel {
 	public ArrayList<Sprite> getSprites() {
 		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 		for (Avatar avatar : avatars) {
-			sprites.add(avatar.getSprite());
+			sprites.add(avatar.getAvatarSprite());
+			sprites.add(avatar.getLeftStackSprite());
+			sprites.add(avatar.getRightStackSprite());
+			sprites.addAll(avatar.getLeftStackShapes());
+			sprites.addAll(avatar.getRightStackShapes());
 		}
 		for (CustomShape shape : shapesPool.getInUse()) {
 			sprites.add(shape.getSprite());

@@ -1,5 +1,6 @@
 package gui;
 
+import controller.AudioController;
 import controller.GameController;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -9,9 +10,12 @@ public class ButtonFactory {
 
 	private static ButtonFactory buttonFactory;
 
-	private static final int NODE_COUNT = 7;
-	private static final String[] btnName = new String[] { "New", "Pause", "Resume", "Quit", null, "Save", "Load" };
-	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3, SAVE = 5, LOAD = 6;
+	private static final int NODE_COUNT = 8;
+	private static final String[] btnName = new String[] { 
+			"New", "Pause", "Resume", "Quit", 
+			null, "Save", "Load", "Mute"};
+	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3,
+			SAVE = 5, LOAD = 6, MUTE = 7;
 
 	public static ButtonFactory getInstance() {
 		if (buttonFactory == null) {
@@ -55,6 +59,17 @@ public class ButtonFactory {
 			break;
 		case LOAD:
 			curBtn.setOnAction(e -> gameController.load());
+			break;
+		case MUTE:
+			curBtn.setOnAction(e -> {
+				if(curBtn.getText().equals("Mute")){
+					AudioController.getInstance().mute();
+					curBtn.setText("Unmute");
+				}else{
+					AudioController.getInstance().unmute();
+					curBtn.setText("Mute");
+				}
+			});
 			break;
 		default:
 			throw new IllegalStateException();

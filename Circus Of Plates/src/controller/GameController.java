@@ -26,7 +26,7 @@ public class GameController extends AnimationTimer {
 		this.gameModel = gameModel;
 		this.shapesController = new ShapesController(this);
 		this.prevCycleTime = System.currentTimeMillis();
-		this.audioController = new AudioController();
+		this.audioController = AudioController.getInstance();
 		audioController.playBackgroundMusic();
 	}
 

@@ -6,12 +6,13 @@ import shapes.CustomShape;
 
 public class ShapesController {
 	private GameController gameController;
-	private static final int VELOCITY_MAX_VALUE = 25;
+	private static final int VELOCITY_MAX_VALUE = 5;
 	private static final int VELOCITY_MIN_VALUE = 3;
-	private static final double GRAVITY = 0.5;
+	private static final double GRAVITY = 0.1;
 
 	public ShapesController(GameController gameController) {
 		this.gameController = gameController;
+		
 	}
 
 	/**
