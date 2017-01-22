@@ -2,6 +2,7 @@ package model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.image.Image;
 import rail.Allign;
@@ -50,14 +51,23 @@ public class GameModel {
 	public ArrayList<Sprite> getSprites() {
 		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 		for (Avatar avatar : avatars) {
-			sprites.add(avatar.getAvatarSprite());
-			sprites.add(avatar.getLeftStackSprite());
-			sprites.add(avatar.getRightStackSprite());
-			sprites.addAll(avatar.getLeftStackShapes());
-			sprites.addAll(avatar.getRightStackShapes());
+			sprites.addAll(avatar.getSprites());
 		}
-		for (CustomShape shape : shapesPool.getInUse()) {
-			sprites.add(shape.getSprite());
+		int cur = 0;
+		List<CustomShape> shapes = shapesPool.getInUse();
+		for (int j = 0; j < shapes.size(); j++) {
+			boolean attached = false;
+			CustomShape shape = shapes.get(j);
+			for(int i = 0; i < 2 && (!attached); i++){
+				attached = avatars.get(i).attach(shape);
+			}
+			if (attached) {
+				shapesPool.removeInUse(cur);
+				j--;
+			} else {
+				sprites.add(shape.getSprite());
+				cur++;
+			}
 		}
 		for (Rail rail : railsContainer.getRails()) {
 			sprites.add(rail.getSprite());

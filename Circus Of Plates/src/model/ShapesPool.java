@@ -57,4 +57,8 @@ public class ShapesPool {
 		return inUse;
 	}
 
+	public void removeInUse(int cur) {
+		inUse.remove(cur);
+	}
+
 }

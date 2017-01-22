@@ -3,24 +3,25 @@ package model;
 import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
+import shapes.CustomShape;
 
 public class Stack {
 
 	public static final int WIDTH = 50, HEIGHT = 5, RADIUS = 10, SHIFT = 15, BORDER_THICKNESS = 5;
+
+	private static final int EPS = 20;
 
 	private int x, y;
 	private int playerIndex;
 	private int heightSum;
 
 	private ArrayList<Sprite> shapes;
-	private int shapeCount;
-	
+
 	public Stack(int playerIndex) {
 		this.playerIndex = playerIndex;
 		y = Util.STAND_HEIGHT;
-		this.heightSum = 0;
+		this.heightSum = y;
 		this.shapes = new ArrayList<Sprite>();
-		this.shapeCount = 0;
 	}
 
 	public void setX(int x) {
@@ -38,16 +39,16 @@ public class Stack {
 	}
 
 	public void addShape(SpriteShape shape) {
-		heightSum += shape.getHeight();
-		shape.setY(y + heightSum);
+		heightSum -= shape.getHeight();
+		shape.setY(heightSum);
 		shape.setX(x + BORDER_THICKNESS);
 		shapes.add(shape);
 	}
 
-	public int getSize(){
-		return shapeCount;
+	public int getSize() {
+		return shapes.size();
 	}
-	
+
 	private Color getStackFillColor() {
 		if (playerIndex == 1) {
 			return Color.RED;
@@ -61,10 +62,29 @@ public class Stack {
 		}
 		return Color.GREEN;
 	}
-	
+
 	private void updateList() {
-		for(int i = 0; i < shapeCount; i++){
-			((SpriteShape)shapes.get(i)).setX(x + BORDER_THICKNESS);
+		for (int i = 0; i < shapes.size(); i++) {
+			((SpriteShape) shapes.get(i)).setX(x + BORDER_THICKNESS);
 		}
+	}
+
+	public boolean attach(CustomShape shape) {
+		if (canAttach(shape)) {
+			addShape((SpriteShape) shape.getSprite());
+			return true;
+		}
+		return false;
+	}
+
+	private boolean canAttach(CustomShape shape) {
+		int baseHeight = (int) (shape.getYPosition() - shape.getHeight());
+		int centrePosition = (int) (shape.getXPosition() + (shape.getWidth() / 2));
+		int realCentre = x + (WIDTH / 2);
+		if (baseHeight >= heightSum - EPS && baseHeight <= heightSum + EPS
+				&& centrePosition >= realCentre - EPS && centrePosition <= realCentre + EPS) {
+			return true;
+		}
+		return false;
 	}
 }

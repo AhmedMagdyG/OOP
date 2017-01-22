@@ -12,7 +12,7 @@ public class Util {
 
 	// GameController
 	public final static int AVATAR_MOVED_DISTANCE = 15;
-	public final static long SHAPE_CYCLE = 100;
+	public final static long SHAPE_CYCLE = 500;
 
 	// ShapesController
 	public static final int VELOCITY_MAX_VALUE = 10;
