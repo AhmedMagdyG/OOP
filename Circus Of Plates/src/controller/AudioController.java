@@ -12,17 +12,18 @@ public class AudioController {
 	private MediaPlayer player;
 
 	private static AudioController audioController;
-	
+
 	private AudioController() {
 		backgroundMusic = new Media(Paths.get("res" + File.separator + BACKGROUND_MUSIC).toUri().toString());
 	}
 
-	public static AudioController getInstance(){
-		if(audioController == null){
+	public static AudioController getInstance() {
+		if (audioController == null) {
 			audioController = new AudioController();
 		}
 		return audioController;
 	}
+
 	public void playBackgroundMusic() {
 		player = new MediaPlayer(backgroundMusic);
 		player.setCycleCount(MediaPlayer.INDEFINITE);
@@ -38,10 +39,10 @@ public class AudioController {
 	}
 
 	public void mute() {
-		player.stop();
+		player.setMute(true);
 	}
-	
-	public void unmute(){
-		player.play();
+
+	public void unmute() {
+		player.setMute(false);
 	}
 }

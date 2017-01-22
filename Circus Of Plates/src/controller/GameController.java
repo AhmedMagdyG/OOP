@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
 import model.GameModel;
 import model.Sprite;
+import model.Util;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
@@ -17,8 +18,6 @@ public class GameController extends AnimationTimer {
 
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
-	private final static int MOVED_DISTANCE = 15;
-	private final static long SHAPE_CYCLE = 100;
 	private long prevCycleTime;
 
 	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameModel) {
@@ -32,7 +31,7 @@ public class GameController extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
-		if (System.currentTimeMillis() - prevCycleTime > SHAPE_CYCLE) {
+		if (System.currentTimeMillis() - prevCycleTime > Util.SHAPE_CYCLE) {
 			shapesController.startNewShape();
 			prevCycleTime = System.currentTimeMillis();
 		}
@@ -45,16 +44,16 @@ public class GameController extends AnimationTimer {
 
 	private void handleMotion() {
 		if (avatarOneToleft) {
-			gameModel.movePlayer(FIRST_AVATAR, -MOVED_DISTANCE);
+			gameModel.movePlayer(FIRST_AVATAR, -Util.AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarOneToRight) {
-			gameModel.movePlayer(FIRST_AVATAR, MOVED_DISTANCE);
+			gameModel.movePlayer(FIRST_AVATAR, Util.AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarTwoToLeft) {
-			gameModel.movePlayer(SECOND_AVATAR, -MOVED_DISTANCE);
+			gameModel.movePlayer(SECOND_AVATAR, -Util.AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarTwoToRight) {
-			gameModel.movePlayer(SECOND_AVATAR, MOVED_DISTANCE);
+			gameModel.movePlayer(SECOND_AVATAR, Util.AVATAR_MOVED_DISTANCE);
 		}
 	}
 
@@ -106,7 +105,6 @@ public class GameController extends AnimationTimer {
 
 	public void quit() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void pauseGame() {
@@ -121,7 +119,6 @@ public class GameController extends AnimationTimer {
 
 	public void load() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void ChangeSettings() {

@@ -6,13 +6,10 @@ import shapes.CustomShape;
 
 public class ShapesController {
 	private GameController gameController;
-	private static final int VELOCITY_MAX_VALUE = 5;
-	private static final int VELOCITY_MIN_VALUE = 3;
-	private static final double GRAVITY = 0.1;
 
 	public ShapesController(GameController gameController) {
 		this.gameController = gameController;
-		
+
 	}
 
 	/**
@@ -30,8 +27,8 @@ public class ShapesController {
 		if (rail == null) {
 			throw new RuntimeException("Empty Rails set!");
 		}
-		double velocity = VELOCITY_MIN_VALUE
-				+ Util.RANDOM_GENERATOR.nextDouble() * (VELOCITY_MAX_VALUE - VELOCITY_MIN_VALUE + 1);
+		double velocity = Util.VELOCITY_MIN_VALUE
+				+ Util.RANDOM_GENERATOR.nextDouble() * (Util.VELOCITY_MAX_VALUE - Util.VELOCITY_MIN_VALUE + 1);
 		shapeToStart.resetMotion();
 		rail.putShapeOnRail(shapeToStart, velocity);
 		return true;
@@ -46,7 +43,7 @@ public class ShapesController {
 				CustomShape shape = rail.getShapes().get(index);
 				shape.moveXDirection(shape.getXVelocity());
 				if (Rail.falling(rail, shape)) {
-					shape.setYVelocity(shape.getYVelocity() + GRAVITY);
+					shape.setYVelocity(shape.getYVelocity() + Util.GRAVITY);
 					shape.moveYDirection(shape.getYVelocity());
 				}
 				if (shape.getYPosition() > Util.CANVAS_HEIGH) {

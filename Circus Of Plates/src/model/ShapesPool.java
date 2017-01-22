@@ -7,7 +7,6 @@ import shapes.CustomShape;
 import shapes.ShapeGenerator;
 
 public class ShapesPool {
-	private static final int POOL_SIZE = 50;
 	private List<CustomShape> available;
 	private List<CustomShape> inUse;
 	private ShapeGenerator shapeGenerator;
@@ -20,7 +19,7 @@ public class ShapesPool {
 
 	public CustomShape getObject() {
 		CustomShape generatedShape = null;
-		if (available.size() + inUse.size() < POOL_SIZE) {
+		if (available.size() + inUse.size() < Util.POOL_SIZE) {
 			generatedShape = shapeGenerator.getShape();
 			inUse.add(generatedShape);
 		} else if (!available.isEmpty()) {

@@ -10,4 +10,15 @@ public class Util {
 	public static final int PLAYER_COUNT = 2;
 	public static final int STAND_HEIGHT = 400;
 
+	// GameController
+	public final static int AVATAR_MOVED_DISTANCE = 15;
+	public final static long SHAPE_CYCLE = 100;
+
+	// ShapesController
+	public static final int VELOCITY_MAX_VALUE = 10;
+	public static final int VELOCITY_MIN_VALUE = 3;
+	public static final double GRAVITY = 0.1;
+
+	// ShapesPool
+	public static final int POOL_SIZE = 50;
 }
