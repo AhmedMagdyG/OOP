@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
-import model.Avatar;
 import model.GameModel;
 import model.ShapesPool;
 import saving.JsonWriter;
 import saving.StateBundle;
-import shapes.CustomShape;
 import sprite.Sprite;
 import sprite.TextSprite;
 import view.GraphicsDrawer;
@@ -146,21 +146,6 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	public void save(String filePath) {
-		ArrayList<Avatar> avatars = gameModel.getAvatars();
-		ShapesPool shapesPool = ShapesPool.getInstance();
-		JsonWriter jsonWriter = new JsonWriter();
-		StateBundle bundle = new StateBundle(avatars.get(FIRST_AVATAR), avatars.get(SECOND_AVATAR),
-				shapesPool.getInUse());
-		try {
-			jsonWriter.save(bundle, filePath, "yarab");
-			LOGGER.info("Game saved successfully");
-		} catch (Exception e) {
-			LOGGER.error("Saving Failed");
-			e.printStackTrace();
-		}
-	}
-
 	private String getWinMessage(int winner) {
 		if (winner > 0) {
 			return gameEnd[0];
@@ -171,17 +156,60 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
+	public void save(String filePath) {
+		JsonWriter jsonWriter = new JsonWriter();
+		StateBundle bundle = getGameState();
+		try {
+			jsonWriter.save(bundle, filePath);
+			done("Saving game", "Game saved successfully.");
+		} catch (Exception e) {
+			alert("Saving game", "Couldn't save the file, make sure you have permision.");
+		} finally {
+			resumeGame();
+		}
+	}
+
 	public void load(String filePath) {
 		StateBundle stateBundle = null;
 		try {
 			JsonWriter jsonWriter = new JsonWriter();
 			stateBundle = jsonWriter.load(filePath);
+			setGameState(stateBundle);
+			done("Load game", "Game loaded Successfully.");
 			LOGGER.info("Game loaded successfully");
 		} catch (Exception e) {
+			alert("Load game", "Couldn't load the file, Check if it's corrupted.");
 			LOGGER.fatal("Game loading failed.");
+		} finally {
+			resumeGame();
 		}
-		ArrayList<CustomShape> inUse = stateBundle.getInUse();
-		ArrayList<Avatar> avatars = stateBundle.getAvatar();
-		LOGGER.debug("Number of avatars = " + avatars.size());
+	}
+
+	private void setGameState(StateBundle stateBundle) {
+		this.difficulty = stateBundle.getDifficulty();
+		gameModel = new GameModel(this.difficulty, stateBundle.getAvatar(), stateBundle.getInUse(),
+				stateBundle.getRailsContainer());
+	}
+
+	private StateBundle getGameState() {
+		StateBundle b = new StateBundle(gameModel.getAvatars().get(0), gameModel.getAvatars().get(1),
+				ShapesPool.getInstance().getInUse(), this.difficulty, gameModel.getRailsContainer());
+		return b;
+	}
+
+	private void alert(String title, String message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Warning");
+		alert.setHeaderText(title);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
+
+	private void done(String title, String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Done");
+		alert.setHeaderText(title);
+		alert.setContentText(message);
+		alert.showAndWait();
 	}
 }

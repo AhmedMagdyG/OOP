@@ -10,18 +10,17 @@ import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import shapes.CustomShape;
-
 public class JsonWriter {
 
 	public JsonWriter() {
 	}
 	
-	public void save(StateBundle stateBundle, String filePath, String savingName) throws IOException {
-		filePath = filePath + File.separator + savingName + ".json";
+	public void save(StateBundle stateBundle, String filePath) throws IOException {
+		filePath = filePath + ".json";
 		initializeJsonFile(filePath);
 		Gson gsonState = new GsonBuilder().setPrettyPrinting().create();
 		String jsonWriter = gsonState.toJson(stateBundle);
+		System.out.println(filePath);
 		FileWriter writer = new FileWriter(filePath);
 		writer.write(jsonWriter);
 		writer.close();

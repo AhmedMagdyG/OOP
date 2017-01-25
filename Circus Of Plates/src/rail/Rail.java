@@ -47,6 +47,15 @@ public class Rail {
 		this.shapes = new ArrayList<>();
 	}
 
+	public Rail(Allign direction, int position, int height, int length, Image spriteImage, List<CustomShape> shapes) {
+		this.direction = direction;
+		this.height = height;
+		this.length = length;
+		this.position = position;
+		this.spriteImage = spriteImage;
+		this.shapes = new ArrayList<CustomShape>(shapes);
+	}
+
 	/**
 	 * @return the x position from which shapes start moving.
 	 **/
@@ -112,5 +121,21 @@ public class Rail {
 
 	public Sprite getSprite() {
 		return new RailSprite(this.position, this.height, this.spriteImage);
+	}
+	
+	public Allign getDir() {
+		return this.direction;
+	}
+	
+	public int getPos() {
+		return this.position;
+	}
+	
+	public int getLen() {
+		return this.length;
+	}
+	
+	public Image getImage() {
+		return this.spriteImage;
 	}
 }

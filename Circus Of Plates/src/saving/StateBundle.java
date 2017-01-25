@@ -1,9 +1,13 @@
 package saving;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
 import shapes.RectangleShape;
@@ -14,22 +18,55 @@ import model.EmptyStack;
 import model.FullStack;
 import model.Stack;
 import model.StackState;
+import rail.Allign;
+import rail.Rail;
+import rail.RailsContainer;
 
 public class StateBundle implements Serializable {
 
-
 	private static final long serialVersionUID = 1L;
-	ArrayList<FakeShape> shapesInUse;
-	FakeStack[] firstPlayerStack, secondPlayerStack;
-	FakeAvatar firstPlayerAvatar, secondPlayerAvatar;
+	private ArrayList<FakeShape> shapesInUse;
+	private FakeStack[] firstPlayerStack, secondPlayerStack;
+	private FakeAvatar firstPlayerAvatar, secondPlayerAvatar;
+	private int difficulty;
+	private ArrayList<FakeRail> fakeRails;
 
-	public StateBundle(Avatar firstPlayerAvatar, Avatar secondPlayerAvatar, List<CustomShape> shapesInUse) {
+	public StateBundle(Avatar firstPlayerAvatar, Avatar secondPlayerAvatar, List<CustomShape> shapesInUse,
+			int difficulty, RailsContainer railsContainer) {
 		initializeShapesInUse(shapesInUse);
 		initializeStack(firstPlayerAvatar.getStack(), secondPlayerAvatar.getStack());
 		this.firstPlayerAvatar = new FakeAvatar(firstPlayerAvatar.getX(), firstPlayerAvatar.getY(),
 				firstPlayerAvatar.getPlayerIndex());
 		this.secondPlayerAvatar = new FakeAvatar(secondPlayerAvatar.getX(), secondPlayerAvatar.getY(),
 				secondPlayerAvatar.getPlayerIndex());
+		fakeRails = new ArrayList<FakeRail>();
+		this.difficulty = difficulty;
+		initFakeRails(railsContainer);
+	}
+
+	private void initFakeRails(RailsContainer railsContainer) {
+		List<Rail> rails = new ArrayList<Rail>(railsContainer.getRails());
+		for (int i = 0; i < rails.size(); i++) {
+			Rail rail = rails.get(i);
+			Allign direction = rail.getDir();
+			int height = rail.getHeight();
+			int position = rail.getPos();
+			int length = rail.getLen();
+			List<CustomShape> shapes = rail.getShapes();
+			fakeRails.add(new FakeRail(direction, height, length, position, getShapes(shapes)));
+		}
+	}
+
+	private ArrayList<FakeShape> getShapes(List<CustomShape> shapes) {
+		ArrayList<FakeShape> fakeShapes = new ArrayList<FakeShape>();
+		for (int i = 0; i < shapes.size(); i++) {
+			FakeShape fakeShape = new FakeShape(shapes.get(i).getFillColor(), shapes.get(i).getFillColor(),
+					shapes.get(i).getXPosition(), shapes.get(i).getYPosition(), shapes.get(i).getXVelocity(),
+					shapes.get(i).getYVelocity(), shapes.get(i).getIsCaught(), shapes.get(i).getWidth(),
+					shapes.get(i).getHeight());
+			fakeShapes.add(fakeShape);
+		}
+		return fakeShapes;
 	}
 
 	private void initializeShapesInUse(List<CustomShape> shapesInUse) {
@@ -93,7 +130,7 @@ public class StateBundle implements Serializable {
 		}
 		return retInUse;
 	}
-	
+
 	public ArrayList<Avatar> getAvatar() {
 		Avatar first = new Avatar();
 		first.setX(this.firstPlayerAvatar.getXPos());
@@ -108,47 +145,73 @@ public class StateBundle implements Serializable {
 		second.setY(this.secondPlayerAvatar.getYPos());
 		second.setIndex(secondPlayerAvatar.getPlayerIndex());
 		Stack[] secondStack = new Stack[2];
-		secondStack[0] = getOneDP1(0);
-		secondStack[1] = getOneDP1(1);
+		secondStack[0] = getOneDP2(0);
+		secondStack[1] = getOneDP2(1);
 		second.setStack(secondStack);
 		ArrayList<Avatar> avatars = new ArrayList<>();
 		avatars.add(first);
 		avatars.add(second);
 		return avatars;
 	}
-	
+
 	private Stack getOneDP1(int ind) {
 		ArrayList<Sprite> retShapes = new ArrayList<Sprite>();
 		ArrayList<FakeShape> loaded = new ArrayList<FakeShape>(firstPlayerStack[ind].getShapes());
-		for(int i = 0; i < loaded.size(); i++) {
-			CustomShape customShape = new RectangleShape((int)loaded.get(i).getXPos(), (int)loaded.get(i).getYPos(), loaded.get(i).getWidth(), loaded.get(i).getHeight(), 
-					loaded.get(i).getFillColor(), loaded.get(i).getStrokeColor());
+		for (int i = 0; i < loaded.size(); i++) {
+			CustomShape customShape = new RectangleShape((int) loaded.get(i).getXPos(), (int) loaded.get(i).getYPos(),
+					loaded.get(i).getWidth(), loaded.get(i).getHeight(), loaded.get(i).getFillColor(),
+					loaded.get(i).getStrokeColor());
 			retShapes.add(new ShapeSprite(customShape));
 		}
 		StackState state;
-		if(firstPlayerStack[ind].getState())
+		if (firstPlayerStack[ind].getState())
 			state = new FullStack();
 		else
 			state = new EmptyStack();
-		return new Stack(firstPlayerStack[ind].getScore(), firstPlayerStack[ind].getXPos(), firstPlayerStack[ind].getYPos(), firstPlayerStack[ind].getPlayerIndex(),
+		return new Stack(firstPlayerStack[ind].getScore(), firstPlayerStack[ind].getXPos(),
+				firstPlayerStack[ind].getYPos(), firstPlayerStack[ind].getPlayerIndex(),
 				firstPlayerStack[ind].getHeightSum(), retShapes, state);
 	}
-	
+
 	private Stack getOneDP2(int ind) {
 		ArrayList<Sprite> retShapes = new ArrayList<Sprite>();
 		ArrayList<FakeShape> loaded = new ArrayList<FakeShape>(secondPlayerStack[ind].getShapes());
-		for(int i = 0; i < loaded.size(); i++) {
-			CustomShape customShape = new RectangleShape((int)loaded.get(i).getXPos(), (int)loaded.get(i).getYPos(), loaded.get(i).getWidth(), loaded.get(i).getHeight(), 
-					loaded.get(i).getFillColor(), loaded.get(i).getStrokeColor());
+		for (int i = 0; i < loaded.size(); i++) {
+			CustomShape customShape = new RectangleShape((int) loaded.get(i).getXPos(), (int) loaded.get(i).getYPos(),
+					loaded.get(i).getWidth(), loaded.get(i).getHeight(), loaded.get(i).getFillColor(),
+					loaded.get(i).getStrokeColor());
 			retShapes.add(new ShapeSprite(customShape));
 		}
 		StackState state;
-		if(secondPlayerStack[ind].getState())
+		if (secondPlayerStack[ind].getState())
 			state = new FullStack();
 		else
 			state = new EmptyStack();
-		return new Stack(secondPlayerStack[ind].getScore(), secondPlayerStack[ind].getXPos(), secondPlayerStack[ind].getYPos(), secondPlayerStack[ind].getPlayerIndex(),
+		return new Stack(secondPlayerStack[ind].getScore(), secondPlayerStack[ind].getXPos(),
+				secondPlayerStack[ind].getYPos(), secondPlayerStack[ind].getPlayerIndex(),
 				secondPlayerStack[ind].getHeightSum(), retShapes, state);
+	}
+
+	public int getDifficulty() {
+		return this.difficulty;
+	}
+
+	public RailsContainer getRailsContainer() {
+		ArrayList<Rail> rails = new ArrayList<Rail>();
+		for (int i = 0; i < fakeRails.size(); i++) {
+			List<CustomShape> shapes = new ArrayList<CustomShape>();
+			ArrayList<FakeShape> fakeShapes = new ArrayList<FakeShape>(fakeRails.get(i).getShapes());
+			for (int j = 0; j < fakeShapes.size(); j++) {
+				CustomShape cs = new RectangleShape((int) fakeShapes.get(j).getXPos(),
+						(int) fakeShapes.get(j).getYPos(), fakeShapes.get(j).getWidth(), fakeShapes.get(j).getHeight(),
+						fakeShapes.get(j).getFillColor(), fakeShapes.get(j).getStrokeColor());
+				shapes.add(cs);
+			}
+			Rail rail = new Rail(fakeRails.get(i).getDir(), fakeRails.get(i).getPos(), fakeRails.get(i).getHeight(),
+					fakeRails.get(i).getLength(), new Image(new File(Rail.IMAGE).toURI().toString()), shapes);
+			rails.add(rail);
+		}
+		return new RailsContainer(rails);
 	}
 
 }

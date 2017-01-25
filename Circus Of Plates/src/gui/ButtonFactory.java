@@ -2,6 +2,8 @@ package gui;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
+
 import controller.AudioController;
 import controller.GameController;
 import javafx.application.Platform;
