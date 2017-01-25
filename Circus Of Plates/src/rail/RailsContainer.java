@@ -12,6 +12,10 @@ public class RailsContainer {
 		rails = new ArrayList<Rail>();
 	}
 
+	public RailsContainer(ArrayList<Rail> rails) {
+		this.rails = new ArrayList<Rail>(rails);
+	}
+
 	public void addRail(Rail rail) {
 		rails.add(rail);
 	}

@@ -173,13 +173,14 @@ public class GameController extends AnimationTimer {
 	}
 
 	private void setGameState(StateBundle stateBundle) {
-		// TODO Auto-generated method stub
-
+		this.difficulty = stateBundle.getDifficulty();
+		gameModel = new GameModel(this.difficulty, stateBundle.getAvatar(), stateBundle.getInUse(),
+				stateBundle.getRailsContainer());
 	}
 
 	private StateBundle getGameState() {
-
-		StateBundle b = null;
+		StateBundle b = new StateBundle(gameModel.getAvatars().get(0), gameModel.getAvatars().get(1),
+				ShapesPool.getInstance().getInUse(), this.difficulty, gameModel.getRailsContainer());
 		return b;
 	}
 

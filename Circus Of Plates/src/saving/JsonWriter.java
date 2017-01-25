@@ -20,6 +20,7 @@ public class JsonWriter {
 		initializeJsonFile(filePath);
 		Gson gsonState = new GsonBuilder().setPrettyPrinting().create();
 		String jsonWriter = gsonState.toJson(stateBundle);
+		System.out.println(filePath);
 		FileWriter writer = new FileWriter(filePath);
 		writer.write(jsonWriter);
 		writer.close();

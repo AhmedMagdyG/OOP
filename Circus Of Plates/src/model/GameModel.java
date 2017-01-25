@@ -34,6 +34,21 @@ public class GameModel {
 		initialiseRails();
 	}
 
+	public GameModel(int difficulty, ArrayList<Avatar> avatars, ArrayList<CustomShape> inUse,
+			RailsContainer railsContainer) {
+//		releaseAvatars();
+//		releaseShapes();
+//		this.prevCycleTime = System.currentTimeMillis();
+//		this.railsContainer = railsContainer;
+//		this.shapesController = new ShapesController(this.railsContainer);
+//		initialiseDifficulty(difficulty);
+//		initialiseAvatars(avatars);
+	}
+
+	private void initialiseAvatars(ArrayList<Avatar> avatars) {
+		this.avatars = avatars;
+	}
+
 	public RailsContainer getRailsContainer() {
 		return railsContainer;
 	}
@@ -135,4 +150,5 @@ public class GameModel {
 	public int getWinner() {
 		return avatars.get(0).getScore() - avatars.get(1).getScore();
 	}
+	
 }
