@@ -3,10 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.log4j.Logger;
+
 import shapes.CustomShape;
 import shapes.ShapeGenerator;
 
 public class ShapesPool {
+	private static final Logger LOGGER = Logger.getLogger(ShapesPool.class);
 
 	public static final int POOL_SIZE = 50;
 
@@ -21,6 +25,7 @@ public class ShapesPool {
 		available = new ArrayList<CustomShape>();
 		inUse = new ArrayList<CustomShape>();
 		shapeGenerator = new ShapeGenerator();
+		LOGGER.debug("ShapesPool created");
 	}
 
 	public static ShapesPool getInstance() {
@@ -36,9 +41,11 @@ public class ShapesPool {
 			generatedShape = shapeGenerator.getShape();
 			inUse.add(generatedShape);
 			createdShapes++;
+			LOGGER.info("New shape added to the pool");
 		} else if (!available.isEmpty()) {
 			generatedShape = available.get(new Random().nextInt(available.size()));
 			useShape(generatedShape);
+			LOGGER.info("Shape selected from the pool");
 		}
 		return generatedShape;
 	}
@@ -51,6 +58,7 @@ public class ShapesPool {
 			}
 		}
 		available.add(expiredShape);
+		LOGGER.debug("Shape added to available list");
 	}
 
 	private boolean useShape(CustomShape availableShape) {
@@ -73,6 +81,7 @@ public class ShapesPool {
 		for (int i = 0; i < inUse.size(); i++) {
 			if (inUse.get(i) == shape) {
 				inUse.remove(i);
+				LOGGER.debug("Shape removed from inUse list");
 				return;
 			}
 		}
@@ -82,5 +91,6 @@ public class ShapesPool {
 		while (inUse.size() > 0) {
 			releaseShape(inUse.get(0));
 		}
+		LOGGER.debug("All shapes are released");
 	}
 }

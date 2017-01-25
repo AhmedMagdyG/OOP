@@ -3,9 +3,12 @@ package shapes;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.paint.Color;
 
 public class ShapeGenerator {
+	private static final Logger LOGGER = Logger.getLogger(ShapeGenerator.class);
 
 	private ArrayList<Color> colors;
 
@@ -38,6 +41,10 @@ public class ShapeGenerator {
 		int colorIndex = (new Random()).nextInt(colors.size());
 		dimensions = new int[] { 40, 15 };
 		CustomShape reqShape = shapeFactory.getObject(shapeType, dimensions, colors.get(colorIndex));
+		LOGGER.debug("Random Shape generated");
+		if (reqShape == null) {
+			LOGGER.fatal("Random Shape is null");
+		}
 		return reqShape;
 	}
 

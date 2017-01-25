@@ -4,21 +4,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.image.Image;
 import shapes.CustomShape;
 import sprite.Sprite;
 import sprite.RailSprite;
 
 public class Rail {
-	
-	public static final int[] xPosition = {0, 750, 0, 750};
-	public static final int[] yPosition = {30, 30, 70, 70};
-	public static final Allign[] allign = 
-		{Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN,
-				Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN};
+	private static final Logger LOGGER = Logger.getLogger(Rail.class);
+
+	public static final int[] xPosition = { 0, 750, 0, 750 };
+	public static final int[] yPosition = { 30, 30, 70, 70 };
+	public static final Allign[] allign = { Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN, Allign.LEFT_ALLIGN,
+			Allign.RIGHT_ALLIGN };
 	public static int WIDTH = 200, HEIGHT = 10;
 	public static final String IMAGE = "res" + File.separator + "rail.png";
-	
+
 	private Allign direction;
 	private int height, length, position;
 	private List<CustomShape> shapes;
@@ -36,7 +38,7 @@ public class Rail {
 	 * @param spriteImage
 	 *            The Image of the rail.
 	 */
-	public Rail(Allign direction, int position, int height, int length, int thickness, Image spriteImage) {
+	public Rail(Allign direction, int position, int height, int length, Image spriteImage) {
 		this.direction = direction;
 		this.height = height;
 		this.length = length;
@@ -94,11 +96,14 @@ public class Rail {
 	}
 
 	public static boolean falling(Rail rail, CustomShape shape) {
+		boolean ret;
 		if (rail.direction == Allign.LEFT_ALLIGN) {
-			return shape.getXPosition() >= rail.getEndX();
+			ret = shape.getXPosition() >= rail.getEndX();
 		} else {
-			return shape.getXPosition() + shape.getWidth() <= rail.getEndX();
+			ret = shape.getXPosition() + shape.getWidth() <= rail.getEndX();
 		}
+		LOGGER.info("Shape is falling ? " + ret);
+		return ret;
 	}
 
 	public List<CustomShape> getShapes() {

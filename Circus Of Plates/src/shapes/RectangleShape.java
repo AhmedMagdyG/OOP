@@ -9,7 +9,7 @@ public class RectangleShape extends CustomShape {
 
 	public int width, height;
 
-	public RectangleShape(int xPosition, int yPosition, int width, int height, Color fillColor){
+	public RectangleShape(int xPosition, int yPosition, int width, int height, Color fillColor) {
 		super(xPosition, yPosition, fillColor);
 		this.width = width;
 		this.height = height;
@@ -20,7 +20,6 @@ public class RectangleShape extends CustomShape {
 		this.width = width;
 		this.height = height;
 	}
-
 
 	@Override
 	public Sprite getSprite() {

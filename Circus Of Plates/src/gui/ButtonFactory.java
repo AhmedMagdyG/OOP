@@ -1,5 +1,7 @@
 package gui;
 
+import org.apache.log4j.Logger;
+
 import controller.AudioController;
 import controller.GameController;
 import javafx.application.Platform;
@@ -8,15 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 
 public class ButtonFactory {
+	private static final Logger LOGGER = Logger.getLogger(ButtonFactory.class);
 
 	private static ButtonFactory buttonFactory;
 
-	private static final String[] btnName = new String[] { 
-			"New", "Pause", "Resume", "Quit", null, 
-			"Save", "Load", null, "Mute", null, 
-			"Easy", "Medium", "Hard" };
-	private static final int NEW = 0, PAUSE = 1, RESUME = 2, 
-			QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
+	private static final String[] btnName = new String[] { "New", "Pause", "Resume", "Quit", null, "Save", "Load", null,
+			"Mute", null, "Easy", "Medium", "Hard" };
+	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
 			MEDIUM = 11, HARD = 12;
 
 	public static ButtonFactory getInstance() {
@@ -83,8 +83,10 @@ public class ButtonFactory {
 			curBtn.setOnAction(e -> gameController.newGame(2));
 			break;
 		default:
-			throw new IllegalStateException();
+			LOGGER.fatal("Wrong button index");
+			return null;
 		}
+		LOGGER.debug(btnName[index] + " button created");
 		return curBtn;
 	}
 }

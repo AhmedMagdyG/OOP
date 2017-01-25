@@ -3,6 +3,8 @@ package model;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.image.Image;
 import shapes.CustomShape;
 import sprite.AvatarSprite;
@@ -11,6 +13,7 @@ import sprite.Sprite;
 import view.GraphicsDrawer;
 
 public class Avatar {
+	private static final Logger LOGGER = Logger.getLogger(Avatar.class);
 
 	private static final String[] spriteName = { "render-1.png", "render-2.png" };
 	private static final int AVATAR_WIDTH = 90;
@@ -23,7 +26,7 @@ public class Avatar {
 	private int x, y;
 	private Stack[] stack;
 	private int playerIndex = 0;
-	
+
 	public Avatar() {
 		playerIndex = playerCount % 2;
 		y = AVATAR_HEIGHT;
@@ -34,6 +37,7 @@ public class Avatar {
 		calculateStackIndex();
 		playerCount = (playerCount + 1) % 2;
 		addSprite();
+		LOGGER.info("Avatar created");
 	}
 
 	private void calculateStackIndex() {
@@ -53,12 +57,12 @@ public class Avatar {
 	}
 
 	public ArrayList<Sprite> getSprites() {
-		ArrayList<Sprite> sprites = new ArrayList<Sprite> ();
+		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 		sprites.add(getAvatarSprite());
 		sprites.addAll(getStackShapes());
 		return sprites;
 	}
-	
+
 	private Sprite getAvatarSprite() {
 		return new AvatarSprite(x, y, spriteImage);
 	}
@@ -73,51 +77,53 @@ public class Avatar {
 		return sprites;
 	}
 
-	public int getScore(){
+	public int getScore() {
 		int totalScore = 0;
-		for(Stack avatarStack : stack){
+		for (Stack avatarStack : stack) {
 			totalScore += avatarStack.getScore();
 		}
+		LOGGER.info("Score Calculated");
 		return totalScore;
 	}
-	
+
 	public boolean attach(CustomShape shape) {
-		if(stack[LEFT].attach(shape) || stack[RIGHT].attach(shape)){
+		if (stack[LEFT].attach(shape) || stack[RIGHT].attach(shape)) {
+			LOGGER.info("Shape added into stack");
 			return true;
 		}
 		return false;
 	}
-	
+
 	public Stack[] getStack() {
 		return this.stack;
 	}
 
 	public void releaseShapes() {
-		for(Stack stack : stack){
+		for (Stack stack : stack) {
 			stack.releaseShapes();
 		}
 	}
-	
+
 	public int getX() {
 		return this.x;
 	}
-	
+
 	public int getY() {
 		return this.y;
 	}
-	
+
 	public int getPlayerIndex() {
 		return this.playerIndex;
 	}
-	
+
 	public void setX(int x) {
 		this.x = x;
 	}
-	
+
 	public void setY(int y) {
 		this.y = y;
 	}
-	
+
 	public void setIndex(int ind) {
 		this.playerIndex = ind;
 	}
@@ -128,7 +134,7 @@ public class Avatar {
 
 	public boolean checkStackFull() {
 		boolean stacksFull = true;
-		for(Stack stack : stack){
+		for (Stack stack : stack) {
 			stacksFull = stacksFull && stack.checkStackFull();
 		}
 		return stacksFull;
