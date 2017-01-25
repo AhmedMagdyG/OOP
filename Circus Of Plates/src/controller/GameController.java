@@ -8,6 +8,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
+import model.AllStacksEndSystem;
 import model.GameModel;
 import saving.JsonWriter;
 import saving.StateBundle;
@@ -33,7 +34,7 @@ public class GameController extends AnimationTimer {
 	private int difficulty = 0;
 
 	public GameController(GraphicsDrawer graphicsDrawer) {
-		this.gameModel = new GameModel(difficulty);
+		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 		this.graphicsDrawer = graphicsDrawer;
 		graphicsDrawer.attachSubject(gameModel);
 		this.audioController = AudioController.getInstance();
@@ -46,7 +47,7 @@ public class GameController extends AnimationTimer {
 			difficulty = i;
 			gameEnded = false;
 			resumeGame();
-			gameModel = new GameModel(difficulty);
+			this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 			graphicsDrawer.attachSubject(gameModel);
 		}
 		LOGGER.info("New game started");
@@ -55,7 +56,7 @@ public class GameController extends AnimationTimer {
 	public void newGame() {
 		gameEnded = false;
 		resumeGame();
-		gameModel = new GameModel(difficulty);
+		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 		graphicsDrawer.attachSubject(gameModel);
 	}
 
@@ -166,7 +167,7 @@ public class GameController extends AnimationTimer {
 
 	private void setGameState(StateBundle stateBundle) {
 		this.difficulty = stateBundle.getDifficulty();
-		
+
 	}
 
 	private void handleMotion() {

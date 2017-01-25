@@ -29,7 +29,7 @@ public class ScoreSprite extends Sprite {
 		String text = "Score: " + Integer.toString(scoreValue);
 		Font font = Font.font(FONT_NAME, FontWeight.BOLD, FONT_SIZE);
 		g.setFont(font);
-		g.setFill(playerIndex == 0 ? Color.RED : Color.CYAN);
+		g.setFill(playerIndex == 0 ? Color.CYAN : Color.RED);
 		g.setStroke(Color.BLACK);
 		g.fillText(text, x, y);
 		g.strokeText(text, x, y);

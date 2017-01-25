@@ -23,18 +23,20 @@ public class GameModel implements Observable {
 	private static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
 	private Observer observer;
-	
+
 	private ArrayList<Avatar> avatars;
 	private RailsContainer railsContainer;
 	private ShapesController shapesController;
 	private long prevCycleTime;
 	private int shapeCycle;
 	private int numberOfRails;
+	private EndSystemStrategy endSystemStrategy;
 
-	public GameModel(int difficulty) {
+	public GameModel(int difficulty, EndSystemStrategy endSystemStrategy) {
 		releaseAvatars();
 		releaseShapes();
 		this.prevCycleTime = System.currentTimeMillis();
+		this.endSystemStrategy = endSystemStrategy;
 		railsContainer = new RailsContainer();
 		shapesController = new ShapesController(railsContainer);
 		initialiseDifficulty(difficulty);
@@ -82,12 +84,7 @@ public class GameModel implements Observable {
 	}
 
 	public boolean gameEnded() {
-		boolean stacksFull = true;
-		for (Avatar avatar : avatars) {
-			stacksFull = stacksFull && avatar.checkStackFull();
-		}
-		LOGGER.info("All stacks are full.. game ended");
-		return stacksFull;
+		return this.endSystemStrategy.gameEnded(avatars);
 	}
 
 	public int getWinner() {

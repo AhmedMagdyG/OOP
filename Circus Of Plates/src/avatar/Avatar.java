@@ -139,4 +139,13 @@ public class Avatar {
 		sprites.add(new ScoreSprite(playerIndex, getScore()));
 		return sprites;
 	}
+
+	public boolean hasFullStack() {
+		for (Stack stack : this.stack) {
+			if (stack.checkStackFull()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
