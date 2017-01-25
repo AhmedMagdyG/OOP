@@ -8,7 +8,7 @@ import shapes.ShapeGenerator;
 
 public class ShapesPool {
 
-	public static final int POOL_SIZE = 50;
+	public static final int POOL_SIZE = 100;
 
 	private List<CustomShape> available;
 	private List<CustomShape> inUse;
@@ -46,18 +46,26 @@ public class ShapesPool {
 	public void releaseShape(CustomShape expiredShape) {
 		for (int index = 0; index < inUse.size(); index++) {
 			if (inUse.get(index) == expiredShape) {
-				inUse.remove(index--);
+				inUse.remove(index);
 				break;
 			}
 		}
-		available.add(expiredShape);
+		boolean found = false;
+		for (int i = 0; i < available.size(); i++) {
+			if (available.get(i) == expiredShape) {
+				found = true;
+			}
+		}
+		if (!found) {
+			available.add(expiredShape);
+		}
 	}
 
 	private boolean useShape(CustomShape availableShape) {
 		for (int index = 0; index < available.size(); index++) {
 			if (availableShape == available.get(index)) {
 				inUse.add(available.get(index));
-				available.remove(index--);
+				available.remove(index);
 				availableShape = null;
 				return true;
 			}
@@ -73,7 +81,7 @@ public class ShapesPool {
 		for (int i = 0; i < inUse.size(); i++) {
 			if (inUse.get(i) == shape) {
 				inUse.remove(i);
-				return;
+				i--;
 			}
 		}
 	}

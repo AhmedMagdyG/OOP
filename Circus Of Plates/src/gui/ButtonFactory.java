@@ -62,7 +62,8 @@ public class ButtonFactory {
 				FileChooser chooser = new FileChooser();
 				chooser.setTitle("Load game");
 				File saveFile = chooser.showSaveDialog(null);
-				gameController.save(saveFile.toPath().toString());
+				if (saveFile != null)
+					gameController.save(saveFile.toPath().toString());
 			});
 			break;
 		case LOAD:
@@ -71,7 +72,8 @@ public class ButtonFactory {
 				FileChooser chooser = new FileChooser();
 				chooser.setTitle("Load game");
 				File loadFile = chooser.showOpenDialog(null);
-				gameController.load(loadFile.toPath().toString());
+				if (loadFile != null)
+					gameController.load(loadFile.toPath().toString());
 			});
 			break;
 		case MUTE:
