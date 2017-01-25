@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
-
+	
 	private Canvas gameCanvas;
 	private GameController gameController;
 	private GraphicsDrawer graphicsDrawer;
