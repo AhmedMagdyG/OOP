@@ -2,6 +2,8 @@ package controller;
 
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import rail.Rail;
 import rail.RailsContainer;
 import shapes.CustomShape;
@@ -9,11 +11,12 @@ import shapes.ShapesPool;
 import view.GraphicsDrawer;
 
 public class ShapesController {
-	
+	private static final Logger LOGGER = Logger.getLogger(ShapesController.class);
+
 	public static final int VELOCITY_MAX_VALUE = 7;
 	public static final int VELOCITY_MIN_VALUE = 3;
 	public static final double GRAVITY = 0.05;
-	
+
 	private RailsContainer railsContainer;
 
 	public ShapesController(RailsContainer railsContainer) {
@@ -33,12 +36,13 @@ public class ShapesController {
 		}
 		Rail rail = railsContainer.getRandomRail();
 		if (rail == null) {
-			throw new RuntimeException("Empty Rails set!");
+			LOGGER.fatal("No rails found");
 		}
 		double velocity = VELOCITY_MIN_VALUE
 				+ (new Random()).nextDouble() * (VELOCITY_MAX_VALUE - VELOCITY_MIN_VALUE + 1);
 		shapeToStart.resetMotion();
 		rail.putShapeOnRail(shapeToStart, velocity);
+		LOGGER.info("Shape added to rail");
 		return true;
 	}
 
@@ -60,5 +64,6 @@ public class ShapesController {
 				}
 			}
 		}
+		LOGGER.info("Shapes Moved");
 	}
 }

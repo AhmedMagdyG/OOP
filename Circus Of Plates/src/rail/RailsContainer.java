@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 
 public class RailsContainer {
+	private static final Logger LOGGER = Logger.getLogger(RailsContainer.class);
+
 	private List<Rail> rails;
 
 	public RailsContainer() {
@@ -27,6 +30,7 @@ public class RailsContainer {
 		if (rails.isEmpty()) {
 			return null;
 		} else {
+			LOGGER.debug("Random rail chosen");
 			return rails.get((new Random()).nextInt(rails.size()));
 		}
 	}

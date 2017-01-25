@@ -2,6 +2,8 @@ package avatar;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
 import shapes.RectangleShape;
@@ -10,6 +12,7 @@ import sprite.ShapeSprite;
 import sprite.Sprite;
 
 public class Stack {
+	private static final Logger LOGGER = Logger.getLogger(Stack.class);
 
 	public static final int WIDTH = 50, HEIGHT = 5, RADIUS = 10, SHIFT = 15, BORDER_THICKNESS = 5;
 	public static final int VERT_EPS = 10, HORT_EPS = 20;
@@ -30,8 +33,9 @@ public class Stack {
 		this.shapes = new ArrayList<Sprite>();
 		this.state = new EmptyStack();
 		score = 0;
+		LOGGER.debug("Stack created");
 	}
-	
+
 	public Stack(int score, int xPos, int yPos, int ind, int height, ArrayList<Sprite> shapes, StackState state) {
 		this.score = score;
 		this.xPosition = xPos;
@@ -43,6 +47,7 @@ public class Stack {
 
 	public void setX(int x) {
 		this.xPosition = x;
+		LOGGER.info("Stack position changed by " + x);
 		updateList();
 	}
 
@@ -52,7 +57,7 @@ public class Stack {
 	}
 
 	public ArrayList<Sprite> getShapesSprite() {
-		return  shapes;
+		return shapes;
 	}
 
 	public void addShape(ShapeSprite shape) {
@@ -64,6 +69,7 @@ public class Stack {
 			removeShapes();
 			addScore();
 		}
+		LOGGER.info("Shape added to stack");
 		checkState();
 	}
 
@@ -94,6 +100,7 @@ public class Stack {
 	private void checkState() {
 		if (heightSum < 100) {
 			state = new FullStack();
+			LOGGER.info("Stack is full");
 		}
 	}
 
@@ -104,10 +111,12 @@ public class Stack {
 			ShapesPool.getInstance().releaseShape(((ShapeSprite) shapes.get(shapes.size() - 1)).getCustomShape());
 			shapes.remove(shapes.size() - 1);
 		}
+		LOGGER.info(winCount + " Shapes removed from the stack");
 	}
 
 	private void addScore() {
 		score++;
+		LOGGER.info("Score increased");
 	}
 
 	private boolean checkRemoval() {
@@ -115,6 +124,7 @@ public class Stack {
 		for (int i = shapes.size() - 2; i >= 0 && sameColor(shapes.get(i + 1), shapes.get(i)); i--) {
 			sameShape++;
 			if (sameShape == winCount) {
+				LOGGER.info("Shapes to be removed and score to be increased");
 				return true;
 			}
 		}
@@ -143,20 +153,21 @@ public class Stack {
 		for (int i = 0; i < shapes.size(); i++) {
 			((ShapeSprite) shapes.get(i)).setX(xPosition + BORDER_THICKNESS);
 		}
+		LOGGER.debug("Stack position changed");
 	}
 
 	private boolean canAttach(CustomShape shape) {
 		return state.canAttach(shape, xPosition, heightSum);
 	}
-	
+
 	public int getX() {
 		return this.xPosition;
 	}
-	
+
 	public int getY() {
 		return this.yPosition;
 	}
-	
+
 	public int getPlayerIndex() {
 		return this.playerIndex;
 	}
@@ -164,6 +175,7 @@ public class Stack {
 	public int getHeightSum() {
 		return this.heightSum;
 	}
+
 	public boolean checkStackFull() {
 		return (state instanceof FullStack);
 	}

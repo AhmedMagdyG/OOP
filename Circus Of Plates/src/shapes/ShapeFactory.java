@@ -4,11 +4,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javafx.scene.paint.Color;
 
 public class ShapeFactory {
-
-	private static final int EQUAL_PARAMETERS = 4, VARIED_PARAMETERS = 5;
+	private static final Logger LOGGER = Logger.getLogger(ShapeFactory.class);
 
 	private static ArrayList<Constructor<?>[]> loadedShapes = null;
 
@@ -27,6 +28,7 @@ public class ShapeFactory {
 				return;
 			}
 		}
+		LOGGER.debug("Loaded shape added to the list");
 		loadedShapes.add(newShapeConstructor);
 	}
 
@@ -44,6 +46,7 @@ public class ShapeFactory {
 			return (CustomShape) returnedShape;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
+			LOGGER.fatal("Cannot get a shape");
 			e.printStackTrace();
 		}
 		return null;
@@ -51,6 +54,11 @@ public class ShapeFactory {
 
 	private Object getReqShape(Constructor<?> constructor, int[] dimensions, Color color)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		try {
+			return constructor.newInstance(0, 0, dimensions[0], dimensions[1], color);
+		} catch (Exception e) {
+			LOGGER.fatal("Error in creating new Shape");
+		}
 		return constructor.newInstance(0, 0, dimensions[0], dimensions[1], color);
 
 	}

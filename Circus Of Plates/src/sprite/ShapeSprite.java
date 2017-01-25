@@ -3,7 +3,6 @@ package sprite;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
-import shapes.RectangleShape;
 
 public class ShapeSprite extends Sprite {
 
@@ -37,21 +36,20 @@ public class ShapeSprite extends Sprite {
 	public Object getColor() {
 		return shape.getFillColor();
 	}
-	
+
 	public Color getStrokeColor() {
 		return shape.getStrokeColor();
 	}
-	
+
 	public int getX() {
-		return (int)shape.getXPosition();
+		return (int) shape.getXPosition();
 	}
-	
+
 	public int getY() {
-		return (int)shape.getYPosition();
+		return (int) shape.getYPosition();
 	}
-	
-	
-	public CustomShape getCustomShape(){
+
+	public CustomShape getCustomShape() {
 		return shape;
 	}
 }

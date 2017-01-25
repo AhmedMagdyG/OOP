@@ -2,6 +2,8 @@ package gui;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import controller.GameController;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
@@ -11,7 +13,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.StackPane;
 
 public class GameLayout extends SplitPane {
-
+	private static final Logger LOGGER = Logger.getLogger(SplitPane.class);
 
 	private ToolBar toolbar;
 	private ArrayList<Node> toolbarNodes = new ArrayList<Node>();
@@ -25,6 +27,7 @@ public class GameLayout extends SplitPane {
 		getItems().addAll(toolbarPane, graphicsPane);
 		setOrientation(Orientation.VERTICAL);
 		setDividerPositions(0.1f, 0.6f);
+		LOGGER.debug("Game layout created");
 	}
 
 	private void initialiseGraphicsPane() {

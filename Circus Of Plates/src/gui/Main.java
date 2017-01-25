@@ -19,15 +19,16 @@ import javafx.stage.Stage;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
+	private static final Logger LOGGER = Logger.getLogger(Main.class);
 
 	private Canvas gameCanvas;
 	private GameController gameController;
 	private GraphicsDrawer graphicsDrawer;
-	private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
 	@Override
 	public void start(Stage gameStage) throws Exception {
 		initialize(gameStage);
+		LOGGER.debug("Game stage initialized");
 		gameController.start();
 	}
 
@@ -69,7 +70,7 @@ public class Main extends Application {
 
 	private static void configureLogger() throws FileNotFoundException, IOException {
 		Properties prop = new Properties();
-		prop.load(new FileInputStream(model.Logger.PROPERTIES_PATH));
+		prop.load(new FileInputStream(model.Logging.PROPERTIES_PATH));
 		PropertyConfigurator.configure(prop);
 	}
 
@@ -79,7 +80,7 @@ public class Main extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		LOGGER.info("Game Started");
+		LOGGER.info("Game started");
 		launch(args);
 	}
 }

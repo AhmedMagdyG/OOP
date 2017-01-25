@@ -7,14 +7,15 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 
 public class DynamicLoader {
+	private static final Logger LOGGER = Logger.getLogger(DynamicLoader.class);
 
 	private ClassLoader classLoader;
 
 	public DynamicLoader() {
 	}
-
 
 	public Constructor<?>[] loadClass(String path) {
 		File file = new File(path);
@@ -26,9 +27,10 @@ public class DynamicLoader {
 			URL[] urls = new URL[] { url };
 			classLoader = new URLClassLoader(urls);
 			Class<?> cls = classLoader.loadClass("shapes." + newClass);
+			LOGGER.info("Successful class loading");
 			return cls.getConstructors();
 		} catch (MalformedURLException | ClassNotFoundException e) {
-			System.out.println("Unsuccessful class loading");
+			LOGGER.error("Unsuccessful class loading");
 		}
 		return null;
 	}
@@ -48,6 +50,7 @@ public class DynamicLoader {
 		while (!reversedPath.isEmpty()) {
 			retNewShapeName.append(reversedPath.pop());
 		}
+		LOGGER.info("Shape name obtained");
 		return retNewShapeName.toString();
 	}
 

@@ -1,9 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import avatar.Avatar;
+import org.apache.log4j.Logger;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -11,13 +11,13 @@ import javafx.scene.input.KeyCode;
 import model.GameModel;
 import saving.JsonWriter;
 import saving.StateBundle;
-import shapes.CustomShape;
 import shapes.ShapesPool;
 import sprite.Sprite;
 import sprite.TextSprite;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
+	private static final Logger LOGGER = Logger.getLogger(GameController.class);
 
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
 	private final static int AVATAR_MOVED_DISTANCE = 15;
@@ -45,12 +45,14 @@ public class GameController extends AnimationTimer {
 		if (!gameEnded) {
 			audioController.resumeBackgroundMusic();
 			start();
+			LOGGER.info("Game resumed");
 		}
 	}
 
 	public void pauseGame() {
 		audioController.pauseBackgroundMusic();
 		stop();
+		LOGGER.info("Game paused");
 	}
 
 	public void newGame(int i) {
@@ -60,6 +62,7 @@ public class GameController extends AnimationTimer {
 			resumeGame();
 			gameModel = new GameModel(difficulty);
 		}
+		LOGGER.info("New game started");
 	}
 
 	public void newGame() {
@@ -70,8 +73,9 @@ public class GameController extends AnimationTimer {
 
 	@Override
 	public void handle(long now) {
-		if (gameEnded)
+		if (gameEnded) {
 			return;
+		}
 		gameModel.moveShapes();
 		handleMotion();
 		ArrayList<Sprite> sprites = gameModel.getSprites();
@@ -80,6 +84,8 @@ public class GameController extends AnimationTimer {
 			pauseGame();
 			gameEnded = true;
 			sprites.add(new TextSprite(getWinMessage(winner)));
+			LOGGER.debug("Winner = " + winner);
+			LOGGER.info(getWinMessage(winner));
 		}
 		graphicsDrawer.draw(sprites);
 	}
@@ -87,15 +93,19 @@ public class GameController extends AnimationTimer {
 	private void handleMotion() {
 		if (avatarOneToleft) {
 			gameModel.movePlayer(FIRST_AVATAR, -AVATAR_MOVED_DISTANCE);
+			LOGGER.info("First player moved to left");
 		}
 		if (avatarOneToRight) {
 			gameModel.movePlayer(FIRST_AVATAR, AVATAR_MOVED_DISTANCE);
+			LOGGER.info("First player moved to right");
 		}
 		if (avatarTwoToLeft) {
 			gameModel.movePlayer(SECOND_AVATAR, -AVATAR_MOVED_DISTANCE);
+			LOGGER.info("Second player moved to left");
 		}
 		if (avatarTwoToRight) {
 			gameModel.movePlayer(SECOND_AVATAR, AVATAR_MOVED_DISTANCE);
+			LOGGER.info("Second player moved to right");
 		}
 	}
 
@@ -167,10 +177,10 @@ public class GameController extends AnimationTimer {
 			stateBundle = jsonWriter.load(filePath);
 			setGameState(stateBundle);
 			done("Load game", "Game loaded Successfully.");
-			loaded = true;
+			LOGGER.info("Game loaded successfully");
 		} catch (Exception e) {
 			alert("Load game", "Couldn't load the file, Check if it's corrupted.");
-			e.printStackTrace();
+			LOGGER.fatal("Game loading failed.");
 		} finally {
 			resumeGame();
 		}
