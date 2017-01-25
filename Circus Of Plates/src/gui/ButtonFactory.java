@@ -1,22 +1,22 @@
 package gui;
 
+import java.io.File;
+
 import controller.AudioController;
 import controller.GameController;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.stage.FileChooser;
 
 public class ButtonFactory {
 
 	private static ButtonFactory buttonFactory;
 
-	private static final String[] btnName = new String[] { 
-			"New", "Pause", "Resume", "Quit", null, 
-			"Save", "Load", null, "Mute", null, 
-			"Easy", "Medium", "Hard" };
-	private static final int NEW = 0, PAUSE = 1, RESUME = 2, 
-			QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
+	private static final String[] btnName = new String[] { "New", "Pause", "Resume", "Quit", null, "Save", "Load", null,
+			"Mute", null, "Easy", "Medium", "Hard" };
+	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
 			MEDIUM = 11, HARD = 12;
 
 	public static ButtonFactory getInstance() {
@@ -57,10 +57,22 @@ public class ButtonFactory {
 			curBtn.setOnAction(e -> Platform.exit());
 			break;
 		case SAVE:
-			curBtn.setOnAction(e -> gameController.save("C:\\Users\\user\\Desktop"));
+			curBtn.setOnAction(e -> {
+				gameController.pauseGame();
+				FileChooser chooser = new FileChooser();
+				chooser.setTitle("Load game");
+				File saveFile = chooser.showSaveDialog(null);
+				gameController.save(saveFile.toPath().toString());
+			});
 			break;
 		case LOAD:
-			curBtn.setOnAction(e -> gameController.load("C:\\Users\\user\\Desktop\\yarab.json"));
+			curBtn.setOnAction(e -> {
+				gameController.pauseGame();
+				FileChooser chooser = new FileChooser();
+				chooser.setTitle("Load game");
+				File loadFile = chooser.showOpenDialog(null);
+				gameController.load(loadFile.toPath().toString());
+			});
 			break;
 		case MUTE:
 			curBtn.setOnAction(e -> {

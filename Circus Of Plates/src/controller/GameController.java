@@ -1,9 +1,10 @@
 package controller;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import model.Avatar;
 import model.GameModel;
@@ -19,9 +20,7 @@ public class GameController extends AnimationTimer {
 
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
 	private final static int AVATAR_MOVED_DISTANCE = 15;
-	private static final String[] gameEnd = { 
-			"The First Player Won the game.",
-			"The Second Player Won the game.",
+	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
 			"The game end in tie." };
 
 	private GraphicsDrawer graphicsDrawer;
@@ -136,19 +135,6 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	public void save(String filePath) {
-		ArrayList<Avatar> avatars = gameModel.getAvatars();
-		ShapesPool shapesPool = ShapesPool.getInstance();
-		JsonWriter jsonWriter = new JsonWriter();
-		StateBundle bundle = new StateBundle(avatars.get(FIRST_AVATAR),
-				avatars.get(SECOND_AVATAR), shapesPool.getInUse());
-		try {
-			jsonWriter.save(bundle, filePath, "yarab");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private String getWinMessage(int winner) {
 		if (winner > 0) {
 			return gameEnd[0];
@@ -159,16 +145,57 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
+	public void save(String filePath) {
+		JsonWriter jsonWriter = new JsonWriter();
+		StateBundle bundle = getGameState();
+		try {
+			jsonWriter.save(bundle, filePath);
+			done("Saving game", "Game saved successfully.");
+		} catch (Exception e) {
+			alert("Saving game", "Couldn't save the file, make sure you have permision.");
+		} finally {
+			resumeGame();
+		}
+	}
+
 	public void load(String filePath) {
 		StateBundle stateBundle = null;
 		try {
 			JsonWriter jsonWriter = new JsonWriter();
 			stateBundle = jsonWriter.load(filePath);
-		} catch(Exception e) {
-			System.out.println("Yarab");
+			setGameState(stateBundle);
+			done("Load game", "Game loaded Successfully.");
+		} catch (Exception e) {
+			alert("Load game", "Couldn't load the file, Check if it's corrupted.");
+		} finally {
+			resumeGame();
 		}
-		ArrayList<CustomShape> inUse = stateBundle.getInUse();
-		ArrayList<Avatar> avatars = stateBundle.getAvatar();
-		System.out.println(avatars.size());
+	}
+
+	private void setGameState(StateBundle stateBundle) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private StateBundle getGameState() {
+
+		StateBundle b = null;
+		return b;
+	}
+
+	private void alert(String title, String message) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Warning");
+		alert.setHeaderText(title);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
+
+	private void done(String title, String message) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Done");
+		alert.setHeaderText(title);
+		alert.setContentText(message);
+		alert.showAndWait();
 	}
 }
