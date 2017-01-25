@@ -69,18 +69,6 @@ public class ShapesPool {
 		LOGGER.debug("Shape added to available list");
 	}
 
-	private boolean useShape(CustomShape availableShape) {
-		for (int index = 0; index < available.size(); index++) {
-			if (availableShape == available.get(index)) {
-				inUse.add(available.get(index));
-				available.remove(index);
-				availableShape = null;
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public List<CustomShape> getInUse() {
 		return inUse;
 	}
@@ -101,5 +89,17 @@ public class ShapesPool {
 			releaseShape(inUse.get(0));
 		}
 		LOGGER.debug("All shapes are released");
+	}
+
+	private boolean useShape(CustomShape availableShape) {
+		for (int index = 0; index < available.size(); index++) {
+			if (availableShape == available.get(index)) {
+				inUse.add(available.get(index));
+				available.remove(index);
+				availableShape = null;
+				return true;
+			}
+		}
+		return false;
 	}
 }

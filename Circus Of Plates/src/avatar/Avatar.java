@@ -23,14 +23,14 @@ public class Avatar {
 	private static int playerCount = 0;
 
 	private Image spriteImage;
-	private int x, y;
+	private int xPosition, y;
 	private Stack[] stack;
 	private int playerIndex = 0;
 
 	public Avatar() {
 		playerIndex = playerCount % 2;
 		y = AVATAR_HEIGHT;
-		x = 300 + playerCount * 300;
+		xPosition = 300 + playerCount * 300;
 		stack = new Stack[2];
 		stack[LEFT] = new Stack(playerCount % 2);
 		stack[RIGHT] = new Stack(playerCount % 2);
@@ -39,41 +39,31 @@ public class Avatar {
 		addSprite();
 		LOGGER.info("Avatar created");
 	}
-	
-	private void calculateStackIndex() {
-		stack[LEFT].setX(x + AVATAR_WIDTH / 2 - Stack.WIDTH - Stack.RADIUS);
-		stack[RIGHT].setX(x + Avatar.AVATAR_WIDTH - Stack.WIDTH + Stack.RADIUS + Stack.SHIFT);
+
+	public int getX() {
+		return this.xPosition;
 	}
 
-	private void addSprite() {
-		spriteImage = new Image(new File("res" + File.separator + spriteName[playerCount]).toURI().toString());
+	public int getY() {
+		return this.y;
 	}
 
-	public void move(int dist) {
-		if (x + dist >= 0 && x + dist + AVATAR_WIDTH <= GraphicsDrawer.SCENE_WIDTH) {
-			x += dist;
-		}
-		calculateStackIndex();
+	public void setX(int x) {
+		this.xPosition = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getPlayerIndex() {
+		return this.playerIndex;
 	}
 
 	public ArrayList<Sprite> getSprites() {
 		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 		sprites.add(getAvatarSprite());
 		sprites.addAll(getStackShapes());
-		return sprites;
-	}
-
-	private Sprite getAvatarSprite() {
-		return new AvatarSprite(x, y, spriteImage);
-	}
-
-	private ArrayList<Sprite> getStackShapes() {
-		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
-		for (Stack avatarStack : stack) {
-			sprites.add(avatarStack.getSprite());
-			sprites.addAll(avatarStack.getShapesSprite());
-		}
-		sprites.add(new ScoreSprite(playerIndex, getScore()));
 		return sprites;
 	}
 
@@ -86,50 +76,16 @@ public class Avatar {
 		return totalScore;
 	}
 
-	public boolean attach(CustomShape shape) {
-		if (stack[LEFT].attach(shape) || stack[RIGHT].attach(shape)) {
-			LOGGER.info("Shape added into stack");
-			return true;
-		}
-		return false;
-	}
-
 	public Stack[] getStack() {
 		return this.stack;
 	}
 
-	public void releaseShapes() {
-		for (Stack stack : stack) {
-			stack.releaseShapes();
-		}
+	public void setIndex(int index) {
+		this.playerIndex = index;
 	}
 
-	public int getX() {
-		return this.x;
-	}
-
-	public int getY() {
-		return this.y;
-	}
-
-	public int getPlayerIndex() {
-		return this.playerIndex;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public void setIndex(int ind) {
-		this.playerIndex = ind;
-	}
-
-	public void setStack(Stack[] s) {
-		this.stack = s;
+	public void setStack(Stack[] stack) {
+		this.stack = stack;
 	}
 
 	public boolean checkStackFull() {
@@ -138,5 +94,49 @@ public class Avatar {
 			stacksFull = stacksFull && stack.checkStackFull();
 		}
 		return stacksFull;
+	}
+
+	public void releaseShapes() {
+		for (Stack stack : stack) {
+			stack.releaseShapes();
+		}
+	}
+
+	public void move(int dist) {
+		if (xPosition + dist >= 0 && xPosition + dist + AVATAR_WIDTH <= GraphicsDrawer.SCENE_WIDTH) {
+			xPosition += dist;
+		}
+		calculateStackIndex();
+	}
+
+	public boolean attach(CustomShape shape) {
+		if (stack[LEFT].attach(shape) || stack[RIGHT].attach(shape)) {
+			LOGGER.info("Shape added into stack");
+			return true;
+		}
+		return false;
+	}
+
+	private void calculateStackIndex() {
+		stack[LEFT].setX(xPosition + AVATAR_WIDTH / 2 - Stack.WIDTH - Stack.RADIUS);
+		stack[RIGHT].setX(xPosition + Avatar.AVATAR_WIDTH - Stack.WIDTH + Stack.RADIUS + Stack.SHIFT);
+	}
+
+	private void addSprite() {
+		spriteImage = new Image(new File("res" + File.separator + spriteName[playerCount]).toURI().toString());
+	}
+
+	private Sprite getAvatarSprite() {
+		return new AvatarSprite(xPosition, y, spriteImage);
+	}
+
+	private ArrayList<Sprite> getStackShapes() {
+		ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+		for (Stack avatarStack : stack) {
+			sprites.add(avatarStack.getSprite());
+			sprites.addAll(avatarStack.getShapesSprite());
+		}
+		sprites.add(new ScoreSprite(playerIndex, getScore()));
+		return sprites;
 	}
 }

@@ -34,6 +34,7 @@ public class GameController extends AnimationTimer {
 
 	public GameController(GraphicsDrawer graphicsDrawer) {
 		this.gameModel = new GameModel(difficulty);
+		this.graphicsDrawer = graphicsDrawer;
 		graphicsDrawer.attachSubject(gameModel);
 		this.audioController = AudioController.getInstance();
 		audioController.playBackgroundMusic();

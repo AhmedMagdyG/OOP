@@ -15,7 +15,7 @@ public class Stack {
 	private static final Logger LOGGER = Logger.getLogger(Stack.class);
 
 	public static final int WIDTH = 50, HEIGHT = 5, RADIUS = 10, SHIFT = 15, BORDER_THICKNESS = 5;
-	public static final int VERT_EPS = 10, HORT_EPS = 20;
+	public static final int VERT_EPS = 10, HORT_EPS = 25;
 	public static final int winCount = 3;
 
 	private int score;
