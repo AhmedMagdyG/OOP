@@ -1,10 +1,11 @@
-package model;
+package avatar;
 
 import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
 import shapes.RectangleShape;
+import shapes.ShapesPool;
 import sprite.ShapeSprite;
 import sprite.Sprite;
 

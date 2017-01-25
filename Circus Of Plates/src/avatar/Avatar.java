@@ -1,4 +1,4 @@
-package model;
+package avatar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Avatar {
 		playerCount = (playerCount + 1) % 2;
 		addSprite();
 	}
-
+	
 	private void calculateStackIndex() {
 		stack[LEFT].setX(x + AVATAR_WIDTH / 2 - Stack.WIDTH - Stack.RADIUS);
 		stack[RIGHT].setX(x + Avatar.AVATAR_WIDTH - Stack.WIDTH + Stack.RADIUS + Stack.SHIFT);

@@ -7,17 +7,17 @@ import java.util.List;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
+import avatar.Avatar;
+import avatar.EmptyStack;
+import avatar.FullStack;
+import avatar.Stack;
+import avatar.StackState;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
 import shapes.RectangleShape;
 import sprite.ShapeSprite;
 import sprite.Sprite;
-import model.Avatar;
-import model.EmptyStack;
-import model.FullStack;
-import model.Stack;
-import model.StackState;
 import rail.Allign;
 import rail.Rail;
 import rail.RailsContainer;
@@ -131,7 +131,7 @@ public class StateBundle implements Serializable {
 		return retInUse;
 	}
 
-	public ArrayList<Avatar> getAvatar() {
+	public Avatar[] getAvatar() {
 		Avatar first = new Avatar();
 		first.setX(this.firstPlayerAvatar.getXPos());
 		first.setY(this.firstPlayerAvatar.getYPos());
@@ -148,9 +148,9 @@ public class StateBundle implements Serializable {
 		secondStack[0] = getOneDP2(0);
 		secondStack[1] = getOneDP2(1);
 		second.setStack(secondStack);
-		ArrayList<Avatar> avatars = new ArrayList<>();
-		avatars.add(first);
-		avatars.add(second);
+		Avatar[] avatars = new Avatar[2];
+		avatars[0] = first;
+		avatars[1] = second;
 		return avatars;
 	}
 

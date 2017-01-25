@@ -28,6 +28,7 @@ public class AudioController {
 		player = new MediaPlayer(backgroundMusic);
 		player.setCycleCount(MediaPlayer.INDEFINITE);
 		player.play();
+		player.setMute(true);
 	}
 
 	public void pauseBackgroundMusic() {

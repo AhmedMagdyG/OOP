@@ -1,10 +1,8 @@
-package model;
+package shapes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import shapes.CustomShape;
-import shapes.ShapeGenerator;
 
 public class ShapesPool {
 

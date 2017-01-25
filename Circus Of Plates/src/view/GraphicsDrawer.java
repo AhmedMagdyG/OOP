@@ -30,9 +30,11 @@ public class GraphicsDrawer {
 	public void draw(ArrayList<Sprite> sprites) {
 		GraphicsContext g = gameCanvas.getGraphicsContext2D();
 		drawBackground(gameCanvas.getGraphicsContext2D());
+		System.out.println("START");
 		int spriteCount = sprites.size();
 		for (int idx = 0; idx < spriteCount; idx++) {
-			sprites.get(idx).draw(g);
+			System.out.println(sprites.get(idx));
+			((Sprite)sprites.get(idx)).draw(g);
 		}
 	}
 

@@ -39,6 +39,7 @@ public class RectangleShape extends CustomShape {
 
 	@Override
 	public void draw(GraphicsContext g) {
+		System.out.println("ARRIVED");
 		g.setFill(fillColor);
 		g.setStroke(strokeColor);
 		g.fillRect(xPosition, yPosition, width, height);

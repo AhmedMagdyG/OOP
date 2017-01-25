@@ -2,10 +2,10 @@ package controller;
 
 import java.util.Random;
 
-import model.ShapesPool;
 import rail.Rail;
 import rail.RailsContainer;
 import shapes.CustomShape;
+import shapes.ShapesPool;
 import view.GraphicsDrawer;
 
 public class ShapesController {

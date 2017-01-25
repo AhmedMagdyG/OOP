@@ -1,17 +1,18 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import avatar.Avatar;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
-import model.Avatar;
 import model.GameModel;
-import model.ShapesPool;
 import saving.JsonWriter;
 import saving.StateBundle;
 import shapes.CustomShape;
+import shapes.ShapesPool;
 import sprite.Sprite;
 import sprite.TextSprite;
 import view.GraphicsDrawer;
@@ -23,6 +24,7 @@ public class GameController extends AnimationTimer {
 	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
 			"The game end in tie." };
 
+	boolean loaded = false;
 	private GraphicsDrawer graphicsDrawer;
 	private GameModel gameModel;
 	private AudioController audioController;
@@ -165,8 +167,10 @@ public class GameController extends AnimationTimer {
 			stateBundle = jsonWriter.load(filePath);
 			setGameState(stateBundle);
 			done("Load game", "Game loaded Successfully.");
+			loaded = true;
 		} catch (Exception e) {
 			alert("Load game", "Couldn't load the file, Check if it's corrupted.");
+			e.printStackTrace();
 		} finally {
 			resumeGame();
 		}

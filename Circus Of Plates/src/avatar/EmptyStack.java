@@ -1,4 +1,4 @@
-package model;
+package avatar;
 
 import shapes.CustomShape;
 
