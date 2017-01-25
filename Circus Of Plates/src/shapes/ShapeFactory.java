@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 
 public class ShapeFactory {
 
-	private static final int EQUAL_PARAMETERS = 2, VARIED_PARAMETERS = 3;
+	private static final int EQUAL_PARAMETERS = 4, VARIED_PARAMETERS = 5;
 
 	private static ArrayList<Constructor<?>[]> loadedShapes = null;
 
@@ -17,6 +17,7 @@ public class ShapeFactory {
 			loadedShapes = new ArrayList<Constructor<?>[]>();
 		}
 		ShapeFactory.addNewShape(RectangleShape.class.getConstructors());
+		ShapeFactory.addNewShape(SquareShape.class.getConstructors());
 	}
 
 	public static void addNewShape(Constructor<?>[] newShapeConstructor) {
@@ -38,8 +39,7 @@ public class ShapeFactory {
 			return null;
 		}
 		try {
-			int sz = loadedShapes.get(requiredShape).length;
-			Constructor<?> constructor = loadedShapes.get(requiredShape)[sz - 1];
+			Constructor<?> constructor = loadedShapes.get(requiredShape)[0];
 			Object returnedShape = getReqShape(constructor, dimensions, color);
 			return (CustomShape) returnedShape;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -52,16 +52,11 @@ public class ShapeFactory {
 	private Object getReqShape(Constructor<?> constructor, int[] dimensions, Color color)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		int parametersLength = constructor.getParameterCount();
-		int dimensionsLength = dimensions.length;
-		if (parametersLength != dimensionsLength + 1) {
-			return null;
-		}
-
 		switch (parametersLength) {
 		case EQUAL_PARAMETERS:
-			return constructor.newInstance(dimensions[0], color);
+			return constructor.newInstance(0, 0, dimensions[0], color);
 		case VARIED_PARAMETERS:
-			return constructor.newInstance(dimensions[0], dimensions[1], color);
+			return constructor.newInstance(0, 0, dimensions[0], dimensions[1], color);
 		default:
 			return null;
 		}

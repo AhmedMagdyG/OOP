@@ -1,50 +1,47 @@
 package shapes;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import model.Sprite;
-import model.SpriteShape;
+import sprite.ShapeSprite;
+import sprite.Sprite;
 
 public class RectangleShape extends CustomShape {
 
-	protected int width, height;
-	protected Rectangle rectangle;
+	public int width, height;
 
-	public RectangleShape(int width, int height, Color color) {
-		super(color);
+	public RectangleShape(int xPosition, int yPosition, int width, int height, Color fillColor){
+		super(xPosition, yPosition, fillColor);
 		this.width = width;
 		this.height = height;
-		this.rectangle = new Rectangle();
-		rectangle.setStroke(Color.BLACK);
-		rectangle.setWidth(this.width);
-		rectangle.setHeight(this.height);
 	}
 
-	public Shape getShape() {
-		updateRectangle();
-		return this.rectangle;
+	public RectangleShape(int xPosition, int yPosition, int width, int height, Color fillColor, Color strokeColor) {
+		super(xPosition, yPosition, fillColor, strokeColor);
+		this.width = width;
+		this.height = height;
 	}
 
-	private void updateRectangle() {
-		rectangle.setX(super.xPosition);
-		rectangle.setY(super.yPosition);
-		rectangle.setFill(super.color);
-	}
 
 	@Override
 	public Sprite getSprite() {
-		return new SpriteShape(super.xPosition, super.yPosition, width, height, super.color);
+		return new ShapeSprite(this);
 	}
 
 	@Override
 	public int getWidth() {
-		return (int) rectangle.getWidth();
+		return width;
 	}
 
 	@Override
 	public int getHeight() {
-		return (int) rectangle.getHeight();
+		return height;
 	}
 
+	@Override
+	public void draw(GraphicsContext g) {
+		g.setFill(fillColor);
+		g.setStroke(strokeColor);
+		g.fillRect(xPosition, yPosition, width, height);
+		g.strokeRect(xPosition, yPosition, width, height);
+	}
 }

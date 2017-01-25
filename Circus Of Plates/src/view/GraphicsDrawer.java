@@ -7,13 +7,17 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import model.Sprite;
+import sprite.Sprite;
 
 public class GraphicsDrawer {
 
-	private static final int STAND_THICKNESS = 10;
-	private static final int STAND_HEIGHT = 585;
-	private static final int STAND_WIDTH = 950;
+	public static final int SCENE_WIDTH = 950, SCENE_HEIGH = 630;
+	public static final int CANVAS_WIDTH = 950, CANVAS_HEIGH = 600;
+	public static final int PLAYER_COUNT = 2;
+	
+	public static final int STAND_THICKNESS = 10;
+	public static final int STAND_HEIGHT = 585;
+	public static final int STAND_WIDTH = 950;
 
 	private Canvas gameCanvas;
 	private Image backGround;

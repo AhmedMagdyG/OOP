@@ -5,27 +5,35 @@ import java.util.ArrayList;
 
 import javafx.scene.image.Image;
 import shapes.CustomShape;
+import sprite.AvatarSprite;
+import sprite.ScoreSprite;
+import sprite.Sprite;
+import view.GraphicsDrawer;
 
 public class Avatar {
 
 	private static final String[] spriteName = { "render-1.png", "render-2.png" };
 	private static final int AVATAR_WIDTH = 90;
 	private static final int LEFT = 0, RIGHT = 1;
+	public static final int AVATAR_HEIGHT = 400;
 
 	private static int playerCount = 0;
 
 	private Image spriteImage;
 	private int x, y;
 	private Stack[] stack;
-
+	private int playerIndex = 0;
+	
 	public Avatar() {
-		addSprite();
-		y = Util.STAND_HEIGHT;
-		x = 0 + playerCount * 300;
+		playerIndex = playerCount % 2;
+		y = AVATAR_HEIGHT;
+		x = 300 + playerCount * 300;
 		stack = new Stack[2];
-		stack[LEFT] = new Stack(playerCount);
-		stack[RIGHT] = new Stack(playerCount);
+		stack[LEFT] = new Stack(playerCount % 2);
+		stack[RIGHT] = new Stack(playerCount % 2);
 		calculateStackIndex();
+		playerCount = (playerCount + 1) % 2;
+		addSprite();
 	}
 
 	private void calculateStackIndex() {
@@ -35,11 +43,10 @@ public class Avatar {
 
 	private void addSprite() {
 		spriteImage = new Image(new File("res" + File.separator + spriteName[playerCount]).toURI().toString());
-		playerCount++;
 	}
 
 	public void move(int dist) {
-		if (x + dist >= 0 && x + dist + AVATAR_WIDTH <= Util.SCENE_WIDTH) {
+		if (x + dist >= 0 && x + dist + AVATAR_WIDTH <= GraphicsDrawer.SCENE_WIDTH) {
 			x += dist;
 		}
 		calculateStackIndex();
@@ -53,7 +60,7 @@ public class Avatar {
 	}
 	
 	private Sprite getAvatarSprite() {
-		return new SpriteAvatar(x, y, spriteImage);
+		return new AvatarSprite(x, y, spriteImage);
 	}
 
 	private ArrayList<Sprite> getStackShapes() {
@@ -62,13 +69,40 @@ public class Avatar {
 			sprites.add(avatarStack.getSprite());
 			sprites.addAll(avatarStack.getShapesSprite());
 		}
+		sprites.add(new ScoreSprite(playerIndex, getScore()));
 		return sprites;
 	}
 
+	public int getScore(){
+		int totalScore = 0;
+		for(Stack avatarStack : stack){
+			totalScore += avatarStack.getScore();
+		}
+		return totalScore;
+	}
+	
 	public boolean attach(CustomShape shape) {
 		if(stack[LEFT].attach(shape) || stack[RIGHT].attach(shape)){
 			return true;
 		}
 		return false;
+	}
+	
+	public Stack[] getStack() {
+		return this.stack;
+	}
+
+	public void releaseShapes() {
+		for(Stack stack : stack){
+			stack.releaseShapes();
+		}
+	}
+
+	public boolean checkStackFull() {
+		boolean stacksFull = true;
+		for(Stack stack : stack){
+			stacksFull = stacksFull && stack.checkStackFull();
+		}
+		return stacksFull;
 	}
 }

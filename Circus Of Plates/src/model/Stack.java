@@ -4,33 +4,41 @@ import java.util.ArrayList;
 
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
+import shapes.RectangleShape;
+import sprite.ShapeSprite;
+import sprite.Sprite;
 
 public class Stack {
 
 	public static final int WIDTH = 50, HEIGHT = 5, RADIUS = 10, SHIFT = 15, BORDER_THICKNESS = 5;
+	public static final int VERT_EPS = 10, HORT_EPS = 20;
+	public static final int winCount = 3;
 
-	private static final int EPS = 20;
-
-	private int x, y;
+	private int score;
+	private int xPosition, yPosition;
 	private int playerIndex;
 	private int heightSum;
 
 	private ArrayList<Sprite> shapes;
+	private StackState state;
 
 	public Stack(int playerIndex) {
 		this.playerIndex = playerIndex;
-		y = Util.STAND_HEIGHT;
-		this.heightSum = y;
+		yPosition = Avatar.AVATAR_HEIGHT;
+		this.heightSum = yPosition;
 		this.shapes = new ArrayList<Sprite>();
+		this.state = new EmptyStack();
+		score = 0;
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		this.xPosition = x;
 		updateList();
 	}
 
 	public Sprite getSprite() {
-		return new SpriteShape(x, y, WIDTH, HEIGHT, getStackFillColor(), getStackStrokeColor());
+		return new ShapeSprite(
+				new RectangleShape(xPosition, yPosition, WIDTH, HEIGHT, getStackFillColor(), getStackStrokeColor()));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -38,15 +46,74 @@ public class Stack {
 		return (ArrayList<Sprite>) shapes.clone();
 	}
 
-	public void addShape(SpriteShape shape) {
+	public void addShape(ShapeSprite shape) {
 		heightSum -= shape.getHeight();
 		shape.setY(heightSum);
-		shape.setX(x + BORDER_THICKNESS);
+		shape.setX(xPosition + BORDER_THICKNESS);
 		shapes.add(shape);
+		if (checkRemoval()) {
+			removeShapes();
+			addScore();
+		}
+		checkState();
 	}
 
-	public int getSize() {
+	public int getScore() {
+		return score;
+	}
+
+	public void releaseShapes() {
+		while (shapes.size() > 0) {
+			ShapesPool.getInstance().releaseShape(((ShapeSprite) shapes.get(shapes.size() - 1)).getCustomShape());
+			shapes.remove(shapes.size() - 1);
+		}
+	}
+
+	public int getShapeCount() {
 		return shapes.size();
+	}
+
+	public boolean attach(CustomShape shape) {
+		if (canAttach(shape)) {
+			shape.setCaught();
+			addShape((ShapeSprite) shape.getSprite());
+			return true;
+		}
+		return false;
+	}
+
+	private void checkState() {
+		if (heightSum < 100) {
+			state = new FullStack();
+		}
+	}
+
+	private void removeShapes() {
+		int removeCount = winCount;
+		while (removeCount-- > 0) {
+			heightSum += ((ShapeSprite) shapes.get(shapes.size() - 1)).getHeight();
+			ShapesPool.getInstance().releaseShape(((ShapeSprite) shapes.get(shapes.size() - 1)).getCustomShape());
+			shapes.remove(shapes.size() - 1);
+		}
+	}
+
+	private void addScore() {
+		score++;
+	}
+
+	private boolean checkRemoval() {
+		int sameShape = 1;
+		for (int i = shapes.size() - 2; i >= 0 && sameColor(shapes.get(i + 1), shapes.get(i)); i--) {
+			sameShape++;
+			if (sameShape == winCount) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean sameColor(Sprite sprite1, Sprite sprite2) {
+		return ((ShapeSprite) sprite1).getColor() == ((ShapeSprite) sprite2).getColor();
 	}
 
 	private Color getStackFillColor() {
@@ -65,26 +132,15 @@ public class Stack {
 
 	private void updateList() {
 		for (int i = 0; i < shapes.size(); i++) {
-			((SpriteShape) shapes.get(i)).setX(x + BORDER_THICKNESS);
+			((ShapeSprite) shapes.get(i)).setX(xPosition + BORDER_THICKNESS);
 		}
-	}
-
-	public boolean attach(CustomShape shape) {
-		if (canAttach(shape)) {
-			addShape((SpriteShape) shape.getSprite());
-			return true;
-		}
-		return false;
 	}
 
 	private boolean canAttach(CustomShape shape) {
-		int baseHeight = (int) (shape.getYPosition() - shape.getHeight());
-		int centrePosition = (int) (shape.getXPosition() + (shape.getWidth() / 2));
-		int realCentre = x + (WIDTH / 2);
-		if (baseHeight >= heightSum - EPS && baseHeight <= heightSum + EPS
-				&& centrePosition >= realCentre - EPS && centrePosition <= realCentre + EPS) {
-			return true;
-		}
-		return false;
+		return state.canAttach(shape, xPosition, heightSum);
+	}
+
+	public boolean checkStackFull() {
+		return (state instanceof FullStack);
 	}
 }

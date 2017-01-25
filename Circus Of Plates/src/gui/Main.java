@@ -8,8 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
-import model.GameModel;
-import model.Util;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
@@ -17,7 +15,6 @@ public class Main extends Application {
 	private Canvas gameCanvas;
 	private GameController gameController;
 	private GraphicsDrawer graphicsDrawer;
-	private GameModel gameModel;
 
 	@Override
 	public void start(Stage gameStage) throws Exception {
@@ -26,10 +23,10 @@ public class Main extends Application {
 	}
 
 	private void initialize(Stage gameStage) {
-		gameCanvas = new Canvas(Util.CANVAS_WIDTH, Util.CANVAS_HEIGH);
+		gameCanvas = new Canvas(GraphicsDrawer.CANVAS_WIDTH, GraphicsDrawer.CANVAS_HEIGH);
 		initialiseGame(gameCanvas);
 		SplitPane layout = new GameLayout(gameCanvas, gameController);
-		Scene gameScene = new Scene(layout, Util.SCENE_WIDTH, Util.SCENE_HEIGH);
+		Scene gameScene = new Scene(layout, GraphicsDrawer.SCENE_WIDTH, GraphicsDrawer.SCENE_HEIGH);
 		move(gameScene);
 		setStageProperties(gameStage, gameScene);
 	}
@@ -51,8 +48,7 @@ public class Main extends Application {
 
 	void initialiseGame(Canvas gameCanvas) {
 		graphicsDrawer = new GraphicsDrawer(gameCanvas);
-		gameModel = new GameModel(Util.PLAYER_COUNT);
-		gameController = new GameController(graphicsDrawer, gameModel);
+		gameController = new GameController(graphicsDrawer);
 	}
 
 	void setStageProperties(Stage gameStage, Scene gameScene) {

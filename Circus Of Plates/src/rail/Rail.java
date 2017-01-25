@@ -1,13 +1,24 @@
 package rail;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.image.Image;
-import model.Sprite;
 import shapes.CustomShape;
+import sprite.Sprite;
+import sprite.RailSprite;
 
 public class Rail {
+	
+	public static final int[] xPosition = {0, 750, 0, 750};
+	public static final int[] yPosition = {30, 30, 70, 70};
+	public static final Allign[] allign = 
+		{Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN,
+				Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN};
+	public static int WIDTH = 200, HEIGHT = 10;
+	public static final String IMAGE = "res" + File.separator + "rail.png";
+	
 	private Allign direction;
 	private int height, length, position;
 	private List<CustomShape> shapes;
@@ -95,6 +106,6 @@ public class Rail {
 	}
 
 	public Sprite getSprite() {
-		return new SpriteRail(this.position, this.height, this.spriteImage);
+		return new RailSprite(this.position, this.height, this.spriteImage);
 	}
 }

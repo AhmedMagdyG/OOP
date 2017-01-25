@@ -2,6 +2,7 @@ package gui;
 
 import controller.AudioController;
 import controller.GameController;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -10,12 +11,13 @@ public class ButtonFactory {
 
 	private static ButtonFactory buttonFactory;
 
-	private static final int NODE_COUNT = 8;
 	private static final String[] btnName = new String[] { 
-			"New", "Pause", "Resume", "Quit", 
-			null, "Save", "Load", "Mute"};
-	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3,
-			SAVE = 5, LOAD = 6, MUTE = 7;
+			"New", "Pause", "Resume", "Quit", null, 
+			"Save", "Load", null, "Mute", null, 
+			"Easy", "Medium", "Hard" };
+	private static final int NEW = 0, PAUSE = 1, RESUME = 2, 
+			QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
+			MEDIUM = 11, HARD = 12;
 
 	public static ButtonFactory getInstance() {
 		if (buttonFactory == null) {
@@ -25,7 +27,7 @@ public class ButtonFactory {
 	}
 
 	public int getNodeCount() {
-		return NODE_COUNT;
+		return btnName.length;
 	}
 
 	private boolean isSeparator(int index) {
@@ -52,24 +54,33 @@ public class ButtonFactory {
 			curBtn.setOnAction(e -> gameController.resumeGame());
 			break;
 		case QUIT:
-			curBtn.setOnAction(e -> gameController.quit());
+			curBtn.setOnAction(e -> Platform.exit());
 			break;
 		case SAVE:
-			curBtn.setOnAction(e -> gameController.save());
+			curBtn.setOnAction(e -> gameController.save("C:\\Users\\user\\Desktop"));
 			break;
 		case LOAD:
-			curBtn.setOnAction(e -> gameController.load());
+			curBtn.setOnAction(e -> gameController.load("C:\\Users\\user\\Desktop\\Name.json"));
 			break;
 		case MUTE:
 			curBtn.setOnAction(e -> {
-				if(curBtn.getText().equals("Mute")){
+				if (curBtn.getText().equals("Mute")) {
 					AudioController.getInstance().mute();
 					curBtn.setText("Unmute");
-				}else{
+				} else {
 					AudioController.getInstance().unmute();
 					curBtn.setText("Mute");
 				}
 			});
+			break;
+		case EASY:
+			curBtn.setOnAction(e -> gameController.newGame(0));
+			break;
+		case MEDIUM:
+			curBtn.setOnAction(e -> gameController.newGame(1));
+			break;
+		case HARD:
+			curBtn.setOnAction(e -> gameController.newGame(2));
 			break;
 		default:
 			throw new IllegalStateException();

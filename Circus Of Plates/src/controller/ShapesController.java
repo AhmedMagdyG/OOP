@@ -1,15 +1,23 @@
 package controller;
 
-import model.Util;
+import java.util.Random;
+
+import model.ShapesPool;
 import rail.Rail;
+import rail.RailsContainer;
 import shapes.CustomShape;
+import view.GraphicsDrawer;
 
 public class ShapesController {
-	private GameController gameController;
+	
+	public static final int VELOCITY_MAX_VALUE = 7;
+	public static final int VELOCITY_MIN_VALUE = 3;
+	public static final double GRAVITY = 0.05;
+	
+	private RailsContainer railsContainer;
 
-	public ShapesController(GameController gameController) {
-		this.gameController = gameController;
-
+	public ShapesController(RailsContainer railsContainer) {
+		this.railsContainer = railsContainer;
 	}
 
 	/**
@@ -19,16 +27,16 @@ public class ShapesController {
 	 *             if the rail set is empty.
 	 */
 	public boolean startNewShape() {
-		CustomShape shapeToStart = gameController.getGameModel().getShapesPool().getObject();
+		CustomShape shapeToStart = ShapesPool.getInstance().getObject();
 		if (shapeToStart == null) {
 			return false;
 		}
-		Rail rail = gameController.getGameModel().getRailsContainer().getRandomRail();
+		Rail rail = railsContainer.getRandomRail();
 		if (rail == null) {
 			throw new RuntimeException("Empty Rails set!");
 		}
-		double velocity = Util.VELOCITY_MIN_VALUE
-				+ Util.RANDOM_GENERATOR.nextDouble() * (Util.VELOCITY_MAX_VALUE - Util.VELOCITY_MIN_VALUE + 1);
+		double velocity = VELOCITY_MIN_VALUE
+				+ (new Random()).nextDouble() * (VELOCITY_MAX_VALUE - VELOCITY_MIN_VALUE + 1);
 		shapeToStart.resetMotion();
 		rail.putShapeOnRail(shapeToStart, velocity);
 		return true;
@@ -38,16 +46,16 @@ public class ShapesController {
 	 * Changes the shapes positions on the rails and while falling.
 	 */
 	public void moveShapes() {
-		for (Rail rail : gameController.getGameModel().getRailsContainer().getRails()) {
+		for (Rail rail : railsContainer.getRails()) {
 			for (int index = 0; index < rail.getShapes().size(); index++) {
 				CustomShape shape = rail.getShapes().get(index);
 				shape.moveXDirection(shape.getXVelocity());
 				if (Rail.falling(rail, shape)) {
-					shape.setYVelocity(shape.getYVelocity() + Util.GRAVITY);
+					shape.setYVelocity(shape.getYVelocity() + GRAVITY);
 					shape.moveYDirection(shape.getYVelocity());
 				}
-				if (shape.getYPosition() > Util.CANVAS_HEIGH) {
-					gameController.getGameModel().getShapesPool().releaseShape(rail.getShapes().get(index));
+				if (shape.getYPosition() > GraphicsDrawer.CANVAS_HEIGH) {
+					ShapesPool.getInstance().releaseShape(rail.getShapes().get(index));
 					rail.removeShape(index--);
 				}
 			}

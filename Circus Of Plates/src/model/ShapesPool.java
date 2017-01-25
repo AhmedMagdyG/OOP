@@ -7,19 +7,31 @@ import shapes.CustomShape;
 import shapes.ShapeGenerator;
 
 public class ShapesPool {
+
+	public static final int POOL_SIZE = 50;
+
 	private List<CustomShape> available;
 	private List<CustomShape> inUse;
 	private ShapeGenerator shapeGenerator;
 
-	public ShapesPool() {
+	private static ShapesPool shapesPool;
+	
+	private ShapesPool() {
 		available = new ArrayList<CustomShape>();
 		inUse = new ArrayList<CustomShape>();
 		shapeGenerator = new ShapeGenerator();
 	}
 
+	public static ShapesPool getInstance(){
+		if(shapesPool == null){
+			shapesPool = new ShapesPool();
+		}
+		return shapesPool;
+	}
+	
 	public CustomShape getObject() {
 		CustomShape generatedShape = null;
-		if (available.size() + inUse.size() < Util.POOL_SIZE) {
+		if (available.size() + inUse.size() < POOL_SIZE) {
 			generatedShape = shapeGenerator.getShape();
 			inUse.add(generatedShape);
 		} else if (!available.isEmpty()) {
@@ -61,4 +73,9 @@ public class ShapesPool {
 		inUse.remove(cur);
 	}
 
+	public void releaseAll() {
+		while(inUse.size() > 0){
+			releaseShape(inUse.get(0));
+		}
+	}
 }

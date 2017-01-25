@@ -1,59 +1,99 @@
 package controller;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.KeyCode;
+import model.Avatar;
 import model.GameModel;
-import model.Sprite;
-import model.Util;
+import model.ShapesPool;
+import saving.JsonWriter;
+import saving.StateBundle;
+import sprite.Sprite;
+import sprite.TextSprite;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
 
+	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
+	private final static int AVATAR_MOVED_DISTANCE = 15;
+	private static final String[] gameEnd = { 
+			"The First Player Won the game.",
+			"The Second Player Won the game.",
+			"The game end in tie." };
+
 	private GraphicsDrawer graphicsDrawer;
 	private GameModel gameModel;
-	private ShapesController shapesController;
 	private AudioController audioController;
 
+	private boolean gameEnded;
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
-	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
-	private long prevCycleTime;
+	private int difficulty = 0;
 
-	public GameController(GraphicsDrawer graphicsDrawer, GameModel gameModel) {
+	public GameController(GraphicsDrawer graphicsDrawer) {
 		this.graphicsDrawer = graphicsDrawer;
-		this.gameModel = gameModel;
-		this.shapesController = new ShapesController(this);
-		this.prevCycleTime = System.currentTimeMillis();
+		this.gameModel = new GameModel(difficulty);
 		this.audioController = AudioController.getInstance();
 		audioController.playBackgroundMusic();
+		gameEnded = false;
+	}
+
+	public void resumeGame() {
+		if (!gameEnded) {
+			audioController.resumeBackgroundMusic();
+			start();
+		}
+	}
+
+	public void pauseGame() {
+		audioController.pauseBackgroundMusic();
+		stop();
+	}
+
+	public void newGame(int i) {
+		if (i != difficulty) {
+			difficulty = i;
+			gameEnded = false;
+			resumeGame();
+			gameModel = new GameModel(difficulty);
+		}
+	}
+
+	public void newGame() {
+		gameEnded = false;
+		resumeGame();
+		gameModel = new GameModel(difficulty);
 	}
 
 	@Override
 	public void handle(long now) {
-		if (System.currentTimeMillis() - prevCycleTime > Util.SHAPE_CYCLE) {
-			shapesController.startNewShape();
-			prevCycleTime = System.currentTimeMillis();
-		}
-		shapesController.moveShapes();
+		if (gameEnded)
+			return;
+		gameModel.moveShapes();
 		handleMotion();
-		gameModel.updateData();
 		ArrayList<Sprite> sprites = gameModel.getSprites();
+		if (gameModel.gameEnded()) {
+			int winner = gameModel.getWinner();
+			pauseGame();
+			gameEnded = true;
+			sprites.add(new TextSprite(getWinMessage(winner)));
+		}
 		graphicsDrawer.draw(sprites);
 	}
 
 	private void handleMotion() {
 		if (avatarOneToleft) {
-			gameModel.movePlayer(FIRST_AVATAR, -Util.AVATAR_MOVED_DISTANCE);
+			gameModel.movePlayer(FIRST_AVATAR, -AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarOneToRight) {
-			gameModel.movePlayer(FIRST_AVATAR, Util.AVATAR_MOVED_DISTANCE);
+			gameModel.movePlayer(FIRST_AVATAR, AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarTwoToLeft) {
-			gameModel.movePlayer(SECOND_AVATAR, -Util.AVATAR_MOVED_DISTANCE);
+			gameModel.movePlayer(SECOND_AVATAR, -AVATAR_MOVED_DISTANCE);
 		}
 		if (avatarTwoToRight) {
-			gameModel.movePlayer(SECOND_AVATAR, Util.AVATAR_MOVED_DISTANCE);
+			gameModel.movePlayer(SECOND_AVATAR, AVATAR_MOVED_DISTANCE);
 		}
 	}
 
@@ -95,39 +135,35 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	public void newGame() {
-		System.out.println("NEW GAME CLICk");
+	public void save(String filePath) {
+		ArrayList<Avatar> avatars = gameModel.getAvatars();
+		ShapesPool shapesPool = ShapesPool.getInstance();
+		JsonWriter jsonWriter = new JsonWriter();
+		StateBundle bundle = new StateBundle(avatars.get(FIRST_AVATAR).getStack(),
+				avatars.get(SECOND_AVATAR).getStack(), shapesPool.getInUse());
+		try {
+			jsonWriter.save(bundle, filePath, "Name");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
-	public void save() {
-		System.out.println("SAVE GAME");
+	private String getWinMessage(int winner) {
+		if (winner > 0) {
+			return gameEnd[0];
+		} else if (winner < 0) {
+			return gameEnd[1];
+		} else {
+			return gameEnd[2];
+		}
 	}
 
-	public void quit() {
-		// TODO Auto-generated method stub
+	public void load(String filePath) {
+		JsonWriter jsonWriter = new JsonWriter();
+		try {
+			jsonWriter.load(filePath);
+		} catch(FileNotFoundException e) {
+			
+		} 
 	}
-
-	public void pauseGame() {
-		audioController.pauseBackgroundMusic();
-		stop();
-	}
-
-	public void resumeGame() {
-		audioController.resumeBackgroundMusic();
-		start();
-	}
-
-	public void load() {
-		// TODO Auto-generated method stub
-	}
-
-	public void ChangeSettings() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public GameModel getGameModel() {
-		return gameModel;
-	}
-
 }
