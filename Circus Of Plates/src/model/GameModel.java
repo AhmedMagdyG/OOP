@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.log4j.Logger;
 
 import avatar.Avatar;
@@ -15,13 +14,16 @@ import rail.RailsContainer;
 import shapes.CustomShape;
 import shapes.ShapesPool;
 import sprite.Sprite;
+import view.Observer;
 
-public class GameModel {
+public class GameModel implements Observable {
 	private static final Logger LOGGER = Logger.getLogger(GameModel.class);
 
 	private static final int PLAYER_COUNT = 2;
 	private static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
+	private Observer observer;
+	
 	private ArrayList<Avatar> avatars;
 	private RailsContainer railsContainer;
 	private ShapesController shapesController;
@@ -41,47 +43,12 @@ public class GameModel {
 		LOGGER.info("Game Model Created");
 	}
 
-	public GameModel(int difficulty, Avatar[] avatars2, ArrayList<CustomShape> inUse,
-			RailsContainer railsContainer) {
-		releaseAvatars();
-		releaseShapes();
-		this.prevCycleTime = System.currentTimeMillis();
-		this.railsContainer = railsContainer;
-		this.shapesController = new ShapesController(this.railsContainer);
-		initialiseAvatars(avatars2);
-		initialiseDifficulty(difficulty);
-	}
-
-	private void initialiseAvatars(Avatar[] avatars2) {
-		initialiseAvatars();
-		for(int i = 0; i < 2; i++){
-			Avatar curAvatar = this.avatars.get(i);
-			Avatar newAvatar = avatars2[i];
-			curAvatar.setX(newAvatar.getX());
-			curAvatar.setY(newAvatar.getY());
-			curAvatar.setStack(newAvatar.getStack());
-		}
-	}
-
 	public RailsContainer getRailsContainer() {
 		return railsContainer;
 	}
 
 	public ArrayList<Avatar> getAvatars() {
 		return this.avatars;
-	}
-
-	public void moveShapes() {
-		if (System.currentTimeMillis() - prevCycleTime > shapeCycle) {
-			shapesController.startNewShape();
-			LOGGER.info("New Shape Started Moving on the rail");
-			prevCycleTime = System.currentTimeMillis();
-		}
-		shapesController.moveShapes();
-	}
-
-	public void movePlayer(int i, int dist) {
-		avatars.get(i).move(dist);
 	}
 
 	public ArrayList<Sprite> getSprites() {
@@ -108,6 +75,23 @@ public class GameModel {
 		}
 		LOGGER.debug("Sprites added to the List");
 		return sprites;
+	}
+
+	public void movePlayer(int i, int dist) {
+		avatars.get(i).move(dist);
+	}
+
+	public boolean gameEnded() {
+		boolean stacksFull = true;
+		for (Avatar avatar : avatars) {
+			stacksFull = stacksFull && avatar.checkStackFull();
+		}
+		LOGGER.info("All stacks are full.. game ended");
+		return stacksFull;
+	}
+
+	public int getWinner() {
+		return avatars.get(0).getScore() - avatars.get(1).getScore();
 	}
 
 	private void initialiseDifficulty(int difficulty) {
@@ -162,17 +146,28 @@ public class GameModel {
 		LOGGER.debug("All shapes in avatars released");
 	}
 
-	public boolean gameEnded() {
-		boolean stacksFull = true;
-		for (Avatar avatar : avatars) {
-			stacksFull = stacksFull && avatar.checkStackFull();
+	private void moveShapes() {
+		if (System.currentTimeMillis() - prevCycleTime > shapeCycle) {
+			shapesController.startNewShape();
+			LOGGER.info("New Shape Started Moving on the rail");
+			prevCycleTime = System.currentTimeMillis();
 		}
-		LOGGER.info("All stacks are full.. game ended");
-		return stacksFull;
+		shapesController.moveShapes();
 	}
 
-	public int getWinner() {
-		return avatars.get(0).getScore() - avatars.get(1).getScore();
+	@Override
+	public void attachObserver(Observer observer) {
+		this.observer = observer;
 	}
-	
+
+	@Override
+	public void notifyObserver() {
+		observer.update();
+	}
+
+	@Override
+	public void updateState() {
+		moveShapes();
+		notifyObserver();
+	}
 }

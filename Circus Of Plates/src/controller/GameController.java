@@ -24,9 +24,8 @@ public class GameController extends AnimationTimer {
 	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
 			"The game end in tie." };
 
-	boolean loaded = false;
-	private GraphicsDrawer graphicsDrawer;
 	private GameModel gameModel;
+	private GraphicsDrawer graphicsDrawer;
 	private AudioController audioController;
 
 	private boolean gameEnded;
@@ -34,11 +33,29 @@ public class GameController extends AnimationTimer {
 	private int difficulty = 0;
 
 	public GameController(GraphicsDrawer graphicsDrawer) {
-		this.graphicsDrawer = graphicsDrawer;
 		this.gameModel = new GameModel(difficulty);
+		graphicsDrawer.attachSubject(gameModel);
 		this.audioController = AudioController.getInstance();
 		audioController.playBackgroundMusic();
 		gameEnded = false;
+	}
+
+	public void newGame(int i) {
+		if (i != difficulty) {
+			difficulty = i;
+			gameEnded = false;
+			resumeGame();
+			gameModel = new GameModel(difficulty);
+			graphicsDrawer.attachSubject(gameModel);
+		}
+		LOGGER.info("New game started");
+	}
+
+	public void newGame() {
+		gameEnded = false;
+		resumeGame();
+		gameModel = new GameModel(difficulty);
+		graphicsDrawer.attachSubject(gameModel);
 	}
 
 	public void resumeGame() {
@@ -55,28 +72,12 @@ public class GameController extends AnimationTimer {
 		LOGGER.info("Game paused");
 	}
 
-	public void newGame(int i) {
-		if (i != difficulty) {
-			difficulty = i;
-			gameEnded = false;
-			resumeGame();
-			gameModel = new GameModel(difficulty);
-		}
-		LOGGER.info("New game started");
-	}
-
-	public void newGame() {
-		gameEnded = false;
-		resumeGame();
-		gameModel = new GameModel(difficulty);
-	}
-
 	@Override
 	public void handle(long now) {
 		if (gameEnded) {
 			return;
 		}
-		gameModel.moveShapes();
+		gameModel.updateState();
 		handleMotion();
 		ArrayList<Sprite> sprites = gameModel.getSprites();
 		if (gameModel.gameEnded()) {
@@ -86,26 +87,6 @@ public class GameController extends AnimationTimer {
 			sprites.add(new TextSprite(getWinMessage(winner)));
 			LOGGER.debug("Winner = " + winner);
 			LOGGER.info(getWinMessage(winner));
-		}
-		graphicsDrawer.draw(sprites);
-	}
-
-	private void handleMotion() {
-		if (avatarOneToleft) {
-			gameModel.movePlayer(FIRST_AVATAR, -AVATAR_MOVED_DISTANCE);
-			LOGGER.info("First player moved to left");
-		}
-		if (avatarOneToRight) {
-			gameModel.movePlayer(FIRST_AVATAR, AVATAR_MOVED_DISTANCE);
-			LOGGER.info("First player moved to right");
-		}
-		if (avatarTwoToLeft) {
-			gameModel.movePlayer(SECOND_AVATAR, -AVATAR_MOVED_DISTANCE);
-			LOGGER.info("Second player moved to left");
-		}
-		if (avatarTwoToRight) {
-			gameModel.movePlayer(SECOND_AVATAR, AVATAR_MOVED_DISTANCE);
-			LOGGER.info("Second player moved to right");
 		}
 	}
 
@@ -147,16 +128,6 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	private String getWinMessage(int winner) {
-		if (winner > 0) {
-			return gameEnd[0];
-		} else if (winner < 0) {
-			return gameEnd[1];
-		} else {
-			return gameEnd[2];
-		}
-	}
-
 	public void save(String filePath) {
 		JsonWriter jsonWriter = new JsonWriter();
 		StateBundle bundle = getGameState();
@@ -186,16 +157,44 @@ public class GameController extends AnimationTimer {
 		}
 	}
 
-	private void setGameState(StateBundle stateBundle) {
-		this.difficulty = stateBundle.getDifficulty();
-		gameModel = new GameModel(this.difficulty, stateBundle.getAvatar(), stateBundle.getInUse(),
-				stateBundle.getRailsContainer());
-	}
-
 	private StateBundle getGameState() {
 		StateBundle b = new StateBundle(gameModel.getAvatars().get(0), gameModel.getAvatars().get(1),
 				ShapesPool.getInstance().getInUse(), this.difficulty, gameModel.getRailsContainer());
 		return b;
+	}
+
+	private void setGameState(StateBundle stateBundle) {
+		this.difficulty = stateBundle.getDifficulty();
+		
+	}
+
+	private void handleMotion() {
+		if (avatarOneToleft) {
+			gameModel.movePlayer(FIRST_AVATAR, -AVATAR_MOVED_DISTANCE);
+			LOGGER.info("First player moved to left");
+		}
+		if (avatarOneToRight) {
+			gameModel.movePlayer(FIRST_AVATAR, AVATAR_MOVED_DISTANCE);
+			LOGGER.info("First player moved to right");
+		}
+		if (avatarTwoToLeft) {
+			gameModel.movePlayer(SECOND_AVATAR, -AVATAR_MOVED_DISTANCE);
+			LOGGER.info("Second player moved to left");
+		}
+		if (avatarTwoToRight) {
+			gameModel.movePlayer(SECOND_AVATAR, AVATAR_MOVED_DISTANCE);
+			LOGGER.info("Second player moved to right");
+		}
+	}
+
+	private String getWinMessage(int winner) {
+		if (winner > 0) {
+			return gameEnd[0];
+		} else if (winner < 0) {
+			return gameEnd[1];
+		} else {
+			return gameEnd[2];
+		}
 	}
 
 	private void alert(String title, String message) {
