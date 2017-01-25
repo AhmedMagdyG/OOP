@@ -36,9 +36,9 @@ public class JsonWriter {
 	
 	public StateBundle load(String filePath) throws FileNotFoundException {
 		File file = new File(filePath);
-		Gson gsonTable = new Gson();
+		Gson gsonState = new Gson();
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-		StateBundle stateBundle = gsonTable.fromJson(bufferedReader, StateBundle.class);
+		StateBundle stateBundle = gsonState.fromJson(bufferedReader, StateBundle.class);
 		return stateBundle;
 	}
 	

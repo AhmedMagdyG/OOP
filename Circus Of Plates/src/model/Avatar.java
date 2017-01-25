@@ -97,6 +97,34 @@ public class Avatar {
 			stack.releaseShapes();
 		}
 	}
+	
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
+	
+	public int getPlayerIndex() {
+		return this.playerIndex;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public void setIndex(int ind) {
+		this.playerIndex = ind;
+	}
+
+	public void setStack(Stack[] s) {
+		this.stack = s;
+	}
 
 	public boolean checkStackFull() {
 		boolean stacksFull = true;

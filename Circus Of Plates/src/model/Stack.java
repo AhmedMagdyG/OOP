@@ -30,6 +30,15 @@ public class Stack {
 		this.state = new EmptyStack();
 		score = 0;
 	}
+	
+	public Stack(int score, int xPos, int yPos, int ind, int height, ArrayList<Sprite> shapes, StackState state) {
+		this.score = score;
+		this.xPosition = xPos;
+		this.yPosition = yPos;
+		this.playerIndex = ind;
+		this.shapes = new ArrayList<Sprite>(shapes);
+		this.state = state;
+	}
 
 	public void setX(int x) {
 		this.xPosition = x;
@@ -41,9 +50,8 @@ public class Stack {
 				new RectangleShape(xPosition, yPosition, WIDTH, HEIGHT, getStackFillColor(), getStackStrokeColor()));
 	}
 
-	@SuppressWarnings("unchecked")
 	public ArrayList<Sprite> getShapesSprite() {
-		return (ArrayList<Sprite>) shapes.clone();
+		return  shapes;
 	}
 
 	public void addShape(ShapeSprite shape) {
@@ -139,7 +147,22 @@ public class Stack {
 	private boolean canAttach(CustomShape shape) {
 		return state.canAttach(shape, xPosition, heightSum);
 	}
+	
+	public int getX() {
+		return this.xPosition;
+	}
+	
+	public int getY() {
+		return this.yPosition;
+	}
+	
+	public int getPlayerIndex() {
+		return this.playerIndex;
+	}
 
+	public int getHeightSum() {
+		return this.heightSum;
+	}
 	public boolean checkStackFull() {
 		return (state instanceof FullStack);
 	}

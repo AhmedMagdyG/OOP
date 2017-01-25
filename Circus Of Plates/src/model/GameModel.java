@@ -67,7 +67,7 @@ public class GameModel {
 				attached = avatars.get(i).attach(shape);
 			}
 			if (attached) {
-				ShapesPool.getInstance().removeInUse(j);
+				ShapesPool.getInstance().removeInUse(shape);
 				j--;
 			} else {
 				sprites.add(shape.getSprite());

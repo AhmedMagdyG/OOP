@@ -10,6 +10,7 @@ import model.GameModel;
 import model.ShapesPool;
 import saving.JsonWriter;
 import saving.StateBundle;
+import shapes.CustomShape;
 import sprite.Sprite;
 import sprite.TextSprite;
 import view.GraphicsDrawer;
@@ -139,12 +140,12 @@ public class GameController extends AnimationTimer {
 		ArrayList<Avatar> avatars = gameModel.getAvatars();
 		ShapesPool shapesPool = ShapesPool.getInstance();
 		JsonWriter jsonWriter = new JsonWriter();
-		StateBundle bundle = new StateBundle(avatars.get(FIRST_AVATAR).getStack(),
-				avatars.get(SECOND_AVATAR).getStack(), shapesPool.getInUse());
+		StateBundle bundle = new StateBundle(avatars.get(FIRST_AVATAR),
+				avatars.get(SECOND_AVATAR), shapesPool.getInUse());
 		try {
-			jsonWriter.save(bundle, filePath, "Name");
+			jsonWriter.save(bundle, filePath, "yarab");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -159,11 +160,15 @@ public class GameController extends AnimationTimer {
 	}
 
 	public void load(String filePath) {
-		JsonWriter jsonWriter = new JsonWriter();
+		StateBundle stateBundle = null;
 		try {
-			jsonWriter.load(filePath);
-		} catch(FileNotFoundException e) {
-			
-		} 
+			JsonWriter jsonWriter = new JsonWriter();
+			stateBundle = jsonWriter.load(filePath);
+		} catch(Exception e) {
+			System.out.println("Yarab");
+		}
+		ArrayList<CustomShape> inUse = stateBundle.getInUse();
+		ArrayList<Avatar> avatars = stateBundle.getAvatar();
+		System.out.println(avatars.size());
 	}
 }

@@ -50,7 +50,11 @@ public abstract class CustomShape {
 	public Color getFillColor() {
 		return this.fillColor;
 	}
-
+	
+	public Color getStrokeColor() {
+		return this.strokeColor;
+	}
+	
 	public void moveXDirection(double dx) {
 		if (!isCaught) {
 			this.xPosition += dx;
@@ -78,6 +82,10 @@ public abstract class CustomShape {
 	public double getXVelocity() {
 		return xVelocity;
 	}
+	
+	public boolean getIsCaught() {
+		return this.isCaught;
+	}
 
 	public void resetMotion() {
 		this.xPosition = 0;
@@ -86,7 +94,7 @@ public abstract class CustomShape {
 		this.yVelocity = 0;
 		isCaught = false;
 	}
-
+	
 	public void setCaught(){
 		isCaught = true;
 	}

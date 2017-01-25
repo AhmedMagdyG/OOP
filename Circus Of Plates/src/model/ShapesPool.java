@@ -69,8 +69,12 @@ public class ShapesPool {
 		return inUse;
 	}
 
-	public void removeInUse(int cur) {
-		inUse.remove(cur);
+	public void removeInUse(CustomShape shape) {
+		for(int i = 0; i < inUse.size(); i++){
+			if(inUse.get(i) == shape){
+				inUse.remove(i);
+			}
+		}
 	}
 
 	public void releaseAll() {

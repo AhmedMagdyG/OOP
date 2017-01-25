@@ -60,7 +60,7 @@ public class ButtonFactory {
 			curBtn.setOnAction(e -> gameController.save("C:\\Users\\user\\Desktop"));
 			break;
 		case LOAD:
-			curBtn.setOnAction(e -> gameController.load("C:\\Users\\user\\Desktop\\Name.json"));
+			curBtn.setOnAction(e -> gameController.load("C:\\Users\\user\\Desktop\\yarab.json"));
 			break;
 		case MUTE:
 			curBtn.setOnAction(e -> {
