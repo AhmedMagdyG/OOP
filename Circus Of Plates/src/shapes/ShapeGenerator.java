@@ -36,11 +36,7 @@ public class ShapeGenerator {
 		int[] dimensions;
 		int shapeType = (new Random()).nextInt(ShapeFactory.getLoadedShapesCount());
 		int colorIndex = (new Random()).nextInt(colors.size());
-		if (shapeType == 0) {
-			dimensions = new int[] { 40, 15 };
-		} else {
-			dimensions = new int[] { 40 };
-		}
+		dimensions = new int[] { 40, 15 };
 		CustomShape reqShape = shapeFactory.getObject(shapeType, dimensions, colors.get(colorIndex));
 		return reqShape;
 	}
