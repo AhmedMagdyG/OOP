@@ -17,7 +17,7 @@ public class ShapeFactory {
 			loadedShapes = new ArrayList<Constructor<?>[]>();
 		}
 		ShapeFactory.addNewShape(RectangleShape.class.getConstructors());
-		ShapeFactory.addNewShape(SquareShape.class.getConstructors());
+		ShapeFactory.addNewShape(EllipseShape.class.getConstructors());
 	}
 
 	public static void addNewShape(Constructor<?>[] newShapeConstructor) {
@@ -51,15 +51,8 @@ public class ShapeFactory {
 
 	private Object getReqShape(Constructor<?> constructor, int[] dimensions, Color color)
 			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		int parametersLength = constructor.getParameterCount();
-		switch (parametersLength) {
-		case EQUAL_PARAMETERS:
-			return constructor.newInstance(0, 0, dimensions[0], color);
-		case VARIED_PARAMETERS:
-			return constructor.newInstance(0, 0, dimensions[0], dimensions[1], color);
-		default:
-			return null;
-		}
+		return constructor.newInstance(0, 0, dimensions[0], dimensions[1], color);
+
 	}
 
 }
