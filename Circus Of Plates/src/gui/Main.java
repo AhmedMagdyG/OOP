@@ -1,20 +1,29 @@
 package gui;
 
-import javafx.event.EventHandler;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import controller.GameController;
 import javafx.application.Application;
-import javafx.scene.input.KeyEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
-	
+
 	private Canvas gameCanvas;
 	private GameController gameController;
 	private GraphicsDrawer graphicsDrawer;
+	private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
 	@Override
 	public void start(Stage gameStage) throws Exception {
@@ -58,7 +67,19 @@ public class Main extends Application {
 		gameStage.show();
 	}
 
+	private static void configureLogger() throws FileNotFoundException, IOException {
+		Properties prop = new Properties();
+		prop.load(new FileInputStream(model.Logger.PROPERTIES_PATH));
+		PropertyConfigurator.configure(prop);
+	}
+
 	public static void main(String[] args) {
+		try {
+			configureLogger();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		LOGGER.info("Game Started");
 		launch(args);
 	}
 }
