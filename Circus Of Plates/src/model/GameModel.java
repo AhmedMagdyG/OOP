@@ -14,11 +14,15 @@ import rail.RailsContainer;
 import shapes.CustomShape;
 import shapes.ShapesPool;
 import sprite.Sprite;
+import sprite.TextSprite;
 import view.Observer;
 
 public class GameModel implements Observable {
 	private static final Logger LOGGER = Logger.getLogger(GameModel.class);
 
+	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
+	"The game end in tie." };
+	
 	private static final int PLAYER_COUNT = 2;
 	private static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
@@ -31,7 +35,9 @@ public class GameModel implements Observable {
 	private int shapeCycle;
 	private int numberOfRails;
 	private EndSystemStrategy endSystemStrategy;
-
+	private boolean gameEnded;
+	private int winner;
+	
 	public GameModel(int difficulty, EndSystemStrategy endSystemStrategy) {
 		releaseAvatars();
 		releaseShapes();
@@ -99,6 +105,10 @@ public class GameModel implements Observable {
 		for (Rail rail : railsContainer.getRails()) {
 			sprites.add(rail.getSprite());
 		}
+		if(gameEnded){
+			sprites.add(new TextSprite(getWinMessage(winner)));
+			LOGGER.info(getWinMessage(winner));
+		}
 		LOGGER.debug("Sprites added to the List");
 		return sprites;
 	}
@@ -112,7 +122,10 @@ public class GameModel implements Observable {
 	}
 
 	public int getWinner() {
-		return avatars.get(0).getScore() - avatars.get(1).getScore();
+		this.winner = avatars.get(0).getScore() - avatars.get(1).getScore();
+		this.gameEnded = true;
+		notifyObserver();
+		return winner;
 	}
 
 	public void releaseAll(){
@@ -179,6 +192,16 @@ public class GameModel implements Observable {
 			prevCycleTime = System.currentTimeMillis();
 		}
 		shapesController.moveShapes();
+	}
+	
+	private String getWinMessage(int winner) {
+		if (winner > 0) {
+			return gameEnd[0];
+		} else if (winner < 0) {
+			return gameEnd[1];
+		} else {
+			return gameEnd[2];
+		}
 	}
 
 	@Override

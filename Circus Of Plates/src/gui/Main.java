@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -21,7 +20,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import shapes.DynamicLoader;
 import shapes.ShapeFactory;
-import sun.rmi.runtime.Log;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
