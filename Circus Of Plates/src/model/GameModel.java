@@ -1,10 +1,12 @@
 package model;
 
-import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import com.sun.jersey.samples.jaxb.Main;
 
 import avatar.Avatar;
 import controller.ShapesController;
@@ -21,8 +23,8 @@ public class GameModel implements Observable {
 	private static final Logger LOGGER = Logger.getLogger(GameModel.class);
 
 	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
-	"The game end in tie." };
-	
+			"The game end in tie." };
+
 	private static final int PLAYER_COUNT = 2;
 	private static final int EASY = 0, MEDIUM = 1, HARD = 2;
 
@@ -37,7 +39,7 @@ public class GameModel implements Observable {
 	private EndSystemStrategy endSystemStrategy;
 	private boolean gameEnded;
 	private int winner;
-	
+
 	public GameModel(int difficulty, EndSystemStrategy endSystemStrategy) {
 		releaseAvatars();
 		releaseShapes();
@@ -50,11 +52,11 @@ public class GameModel implements Observable {
 		initialiseRails();
 		LOGGER.info("Game Model Created");
 	}
-	
-	public GameModel(int difficulty, Avatar[] avatars2, ArrayList<CustomShape> inUse,
- 			RailsContainer railsContainer, EndSystemStrategy endSystemStrategy) {
-			releaseAvatars();
-			releaseShapes();
+
+	public GameModel(int difficulty, Avatar[] avatars2, ArrayList<CustomShape> inUse, RailsContainer railsContainer,
+			EndSystemStrategy endSystemStrategy) {
+		releaseAvatars();
+		releaseShapes();
 		this.prevCycleTime = System.currentTimeMillis();
 		this.railsContainer = railsContainer;
 		this.shapesController = new ShapesController(this.railsContainer);
@@ -62,11 +64,11 @@ public class GameModel implements Observable {
 		initialiseDifficulty(difficulty);
 		this.endSystemStrategy = endSystemStrategy;
 		LOGGER.info("Game Model Created");
- 	}
-	
+	}
+
 	private void initialiseAvatars(Avatar[] avatars2) {
 		initialiseAvatars();
-		for(int i = 0; i < 2; i++){
+		for (int i = 0; i < 2; i++) {
 			Avatar curAvatar = this.avatars.get(i);
 			Avatar newAvatar = avatars2[i];
 			curAvatar.setX(newAvatar.getX());
@@ -105,7 +107,7 @@ public class GameModel implements Observable {
 		for (Rail rail : railsContainer.getRails()) {
 			sprites.add(rail.getSprite());
 		}
-		if(gameEnded){
+		if (gameEnded) {
 			sprites.add(new TextSprite(getWinMessage(winner)));
 			LOGGER.info(getWinMessage(winner));
 		}
@@ -128,11 +130,11 @@ public class GameModel implements Observable {
 		return winner;
 	}
 
-	public void releaseAll(){
+	public void releaseAll() {
 		releaseShapes();
 		releaseAvatars();
 	}
-	
+
 	private void initialiseDifficulty(int difficulty) {
 		switch (difficulty) {
 		case EASY:
@@ -162,12 +164,17 @@ public class GameModel implements Observable {
 	}
 
 	private void initialiseRails() {
-		Image spriteImage = new Image(new File(Rail.IMAGE).toURI().toString());
-		for (int i = 0; i < numberOfRails; i++) {
-			railsContainer
-					.addRail(new Rail(Rail.allign[i], Rail.xPosition[i], Rail.yPosition[i], Rail.WIDTH, spriteImage));
+		try {
+			String path = Main.class.getResource(Rail.IMAGE).toURI().toString();
+			Image spriteImage = new Image(path);
+			for (int i = 0; i < numberOfRails; i++) {
+				railsContainer.addRail(
+						new Rail(Rail.allign[i], Rail.xPosition[i], Rail.yPosition[i], Rail.WIDTH, spriteImage));
+			}
+			LOGGER.info("rails Initialised");
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
-		LOGGER.info("rails Initialised");
 	}
 
 	private void releaseShapes() {
@@ -193,7 +200,7 @@ public class GameModel implements Observable {
 		}
 		shapesController.moveShapes();
 	}
-	
+
 	private String getWinMessage(int winner) {
 		if (winner > 0) {
 			return gameEnd[0];
@@ -221,7 +228,7 @@ public class GameModel implements Observable {
 	}
 
 	public int getEndStrategy() {
-		if(endSystemStrategy instanceof AllStacksEndSystem)
+		if (endSystemStrategy instanceof AllStacksEndSystem)
 			return 1;
 		return 0;
 	}

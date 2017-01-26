@@ -14,7 +14,7 @@ public class JsonWriter {
 
 	public JsonWriter() {
 	}
-	
+
 	public void save(StateBundle stateBundle, String filePath) throws IOException {
 		filePath = filePath + ".json";
 		initializeJsonFile(filePath);
@@ -25,14 +25,14 @@ public class JsonWriter {
 		writer.write(jsonWriter);
 		writer.close();
 	}
-	
+
 	private void initializeJsonFile(String filePath) throws IOException {
 		File file = new File(filePath);
-		if(!file.exists()) {
+		if (!file.exists()) {
 			file.createNewFile();
 		}
 	}
-	
+
 	public StateBundle load(String filePath) throws FileNotFoundException {
 		File file = new File(filePath);
 		Gson gsonState = new Gson();
@@ -40,5 +40,5 @@ public class JsonWriter {
 		StateBundle stateBundle = gsonState.fromJson(bufferedReader, StateBundle.class);
 		return stateBundle;
 	}
-	
+
 }

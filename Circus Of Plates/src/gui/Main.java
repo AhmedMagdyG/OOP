@@ -1,6 +1,5 @@
 package gui;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -74,9 +73,13 @@ public class Main extends Application {
 	}
 
 	private static void configureLogger() throws FileNotFoundException, IOException {
-		Properties prop = new Properties();
-		prop.load(new FileInputStream(model.Paths.PROPERTIES_PATH));
-		PropertyConfigurator.configure(prop);
+		try {
+			Properties prop = new Properties();
+			prop.load(Main.class.getResourceAsStream("/properties/" + "log4j.properties"));
+			PropertyConfigurator.configure(prop);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

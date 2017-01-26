@@ -1,6 +1,5 @@
 package rail;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class Rail {
 	public static final Allign[] allign = { Allign.LEFT_ALLIGN, Allign.RIGHT_ALLIGN, Allign.LEFT_ALLIGN,
 			Allign.RIGHT_ALLIGN };
 	public static int WIDTH = 200, HEIGHT = 10;
-	public static final String IMAGE = "res" + File.separator + "rail.png";
+	public static final String IMAGE = "/pic/" + "rail.png";
 
 	private Allign direction;
 	private int height, length, position;
@@ -122,19 +121,19 @@ public class Rail {
 	public Sprite getSprite() {
 		return new RailSprite(this.position, this.height, this.spriteImage);
 	}
-	
+
 	public Allign getDir() {
 		return this.direction;
 	}
-	
+
 	public int getPos() {
 		return this.position;
 	}
-	
+
 	public int getLen() {
 		return this.length;
 	}
-	
+
 	public Image getImage() {
 		return this.spriteImage;
 	}

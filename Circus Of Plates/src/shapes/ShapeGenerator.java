@@ -24,7 +24,7 @@ public class ShapeGenerator {
 		colors.add(Color.RED);
 		colors.add(Color.BLUE);
 		colors.add(Color.GREEN);
-		colors.add(Color.CYAN);
+		colors.add(Color.YELLOW);
 	}
 
 	public void addColor(Color newColor) {

@@ -61,6 +61,8 @@ public class ButtonContainer {
 				File saveFile = chooser.showSaveDialog(null);
 				if (saveFile != null)
 					GameController.getInstance().save(saveFile.toPath().toString());
+				else
+					GameController.getInstance().resumeGame();
 			});
 			break;
 		case LOAD:
@@ -71,6 +73,8 @@ public class ButtonContainer {
 				File loadFile = chooser.showOpenDialog(null);
 				if (loadFile != null)
 					GameController.getInstance().load(loadFile.toPath().toString());
+				else
+					GameController.getInstance().resumeGame();
 			});
 			break;
 		case MUTE:

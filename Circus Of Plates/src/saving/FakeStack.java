@@ -2,8 +2,6 @@ package saving;
 
 import java.util.ArrayList;
 
-import sprite.Sprite;
-
 public class FakeStack {
 
 	private int score;
@@ -24,33 +22,33 @@ public class FakeStack {
 		this.shapes = new ArrayList<FakeShape>(shapes);
 		this.state = state;
 	}
-	
+
 	public int getScore() {
 		return this.score;
 	}
-	
+
 	public int getXPos() {
 		return this.xPos;
 	}
-	
+
 	public int getYPos() {
 		return this.yPos;
 	}
-	
+
 	public int getPlayerIndex() {
 		return this.playerIndex;
 	}
-	
+
 	public int getHeightSum() {
 		return this.heightSum;
 	}
-	
+
 	public ArrayList<FakeShape> getShapes() {
 		return this.shapes;
 	}
-	
+
 	public boolean getState() {
 		return this.state;
 	}
-	
+
 }

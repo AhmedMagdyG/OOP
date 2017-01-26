@@ -1,9 +1,11 @@
 package avatar;
 
-import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+
+import com.sun.jersey.samples.jaxb.Main;
 
 import javafx.scene.image.Image;
 import shapes.CustomShape;
@@ -123,7 +125,13 @@ public class Avatar {
 	}
 
 	private void addSprite() {
-		spriteImage = new Image(new File("res" + File.separator + spriteName[playerCount]).toURI().toString());
+		String path;
+		try {
+			path = Main.class.getResource("/pic" + "/" + spriteName[playerCount]).toURI().toString();
+			spriteImage = new Image(path);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Sprite getAvatarSprite() {

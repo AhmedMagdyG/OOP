@@ -1,9 +1,10 @@
 package controller;
 
-import java.io.File;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+
+import com.sun.jersey.samples.jaxb.Main;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -18,7 +19,13 @@ public class AudioController {
 	private static AudioController audioController;
 
 	private AudioController() {
-		backgroundMusic = new Media(Paths.get("res" + File.separator + BACKGROUND_MUSIC).toUri().toString());
+		String path;
+		try {
+			path = Main.class.getResource("/music" + "/" + BACKGROUND_MUSIC).toURI().toString();
+			backgroundMusic = new Media(path);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static AudioController getInstance() {

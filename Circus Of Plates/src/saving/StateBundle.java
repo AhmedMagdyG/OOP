@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import avatar.Avatar;
 import avatar.EmptyStack;
 import avatar.FullStack;
@@ -15,7 +13,6 @@ import avatar.StackState;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
-import shapes.RectangleShape;
 import shapes.ShapeFactory;
 import shapes.ShapeGenerator;
 import sprite.ShapeSprite;

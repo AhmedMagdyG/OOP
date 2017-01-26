@@ -187,9 +187,9 @@ public class Stack {
 	}
 
 	public void initializeState() {
-		if(heightSum < 100) 
+		if (heightSum < 100)
 			state = new FullStack();
-		else 
+		else
 			state = new EmptyStack();
 		updateList();
 	}

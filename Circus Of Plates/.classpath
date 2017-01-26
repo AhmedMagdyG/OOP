@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="dep"/>
+	<classpathentry kind="src" path="jars"/>
+	<classpathentry kind="src" path="log"/>
+	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="dep/gson-2.3.1.jar"/>
 	<classpathentry kind="lib" path="dep/json-simple-1.1.1.jar"/>

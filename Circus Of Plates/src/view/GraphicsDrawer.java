@@ -1,9 +1,10 @@
 package view;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+
+import com.sun.jersey.samples.jaxb.Main;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,7 +14,7 @@ import model.GameModel;
 import sprite.Sprite;
 
 public class GraphicsDrawer implements Observer {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(GraphicsDrawer.class);
 
 	public static final int SCENE_WIDTH = 950, SCENE_HEIGH = 630;
@@ -29,7 +30,12 @@ public class GraphicsDrawer implements Observer {
 
 	public GraphicsDrawer(Canvas gameCanvas) {
 		this.gameCanvas = gameCanvas;
-		this.backGround = new Image(new File("res" + File.separator + "background.jpg").toURI().toString());
+		try {
+			String path = Main.class.getResource("/pic/" + "background.jpg").toURI().toString();
+			this.backGround = new Image(path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void draw(ArrayList<Sprite> sprites) {
@@ -37,7 +43,7 @@ public class GraphicsDrawer implements Observer {
 		drawBackground(gameCanvas.getGraphicsContext2D());
 		int spriteCount = sprites.size();
 		for (int idx = 0; idx < spriteCount; idx++) {
-			((Sprite)sprites.get(idx)).draw(g);
+			((Sprite) sprites.get(idx)).draw(g);
 		}
 		LOGGER.debug("Sprites repainted");
 	}
@@ -48,7 +54,6 @@ public class GraphicsDrawer implements Observer {
 		g.fillRect(0, STAND_HEIGHT, STAND_WIDTH, STAND_THICKNESS);
 		LOGGER.debug("Background repainted");
 	}
-
 
 	@Override
 	public void update() {
