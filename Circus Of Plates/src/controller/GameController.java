@@ -34,7 +34,7 @@ public class GameController extends AnimationTimer {
 	private GraphicsDrawer graphicsDrawer;
 	private AudioController audioController;
 	private EndSystemStrategy endSystemStrategy;
-	
+
 	private boolean gameEnded;
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private int difficulty = 0;
@@ -43,13 +43,13 @@ public class GameController extends AnimationTimer {
 	}
 
 	public static GameController getInstance() {
-		if(gameController == null){
+		if (gameController == null) {
 			gameController = new GameController();
 		}
 		return gameController;
 	}
-	
-	public void setGraphicsDrawer(GraphicsDrawer graphicsDrawer){
+
+	public void setGraphicsDrawer(GraphicsDrawer graphicsDrawer) {
 		endSystemStrategy = new AllStacksEndSystem();
 		this.gameModel = new GameModel(difficulty, endSystemStrategy);
 		this.graphicsDrawer = graphicsDrawer;
@@ -63,8 +63,12 @@ public class GameController extends AnimationTimer {
 		if (i != difficulty) {
 			difficulty = i;
 			gameEnded = false;
+<<<<<<< HEAD
 			gameModel.releaseAll();
 			this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
+=======
+			this.gameModel = new GameModel(difficulty, endSystemStrategy);
+>>>>>>> 6ef6d643efe7294e5d362dad05b606e494bd200a
 			graphicsDrawer.attachSubject(gameModel);
 			resumeGame();
 		}
@@ -72,9 +76,14 @@ public class GameController extends AnimationTimer {
 	}
 
 	public void newGame() {
+		audioController.beginBackgroundMusic();
 		gameEnded = false;
+<<<<<<< HEAD
 		gameModel.releaseAll();
 		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
+=======
+		this.gameModel = new GameModel(difficulty, endSystemStrategy);
+>>>>>>> 6ef6d643efe7294e5d362dad05b606e494bd200a
 		graphicsDrawer.attachSubject(gameModel);
 		resumeGame();
 	}
@@ -158,10 +167,10 @@ public class GameController extends AnimationTimer {
 		ButtonType buttonTypeTwo = new ButtonType("One stack full");
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeOne){
-		    endSystemStrategy = new AllStacksEndSystem();
+		if (result.get() == buttonTypeOne) {
+			endSystemStrategy = new AllStacksEndSystem();
 		} else if (result.get() == buttonTypeTwo) {
-		    endSystemStrategy = new OneStackEndSystem();
+			endSystemStrategy = new OneStackEndSystem();
 		}
 	}
 
