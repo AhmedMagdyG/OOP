@@ -1,9 +1,10 @@
 package saving;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.sun.jersey.samples.jaxb.Main;
 
 import avatar.Avatar;
 import avatar.EmptyStack;
@@ -220,9 +221,15 @@ public class StateBundle implements Serializable {
 			for (int j = 0; j < fakeShapes.size(); j++) {
 				shapes.add(getCustom(fakeShapes.get(j)));
 			}
-			Rail rail = new Rail(fakeRails.get(i).getDir(), fakeRails.get(i).getPos(), fakeRails.get(i).getHeight(),
-					fakeRails.get(i).getLength(), new Image(new File(Rail.IMAGE).toURI().toString()), shapes);
-			rails.add(rail);
+			try{
+			String path = Main.class.getResource(Rail.IMAGE).toURI().toString();
+			Image spriteImage = new Image(path);
+				Rail rail = new Rail(fakeRails.get(i).getDir(), fakeRails.get(i).getPos(), fakeRails.get(i).getHeight(),
+						fakeRails.get(i).getLength(), spriteImage, shapes);
+				rails.add(rail);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		}
 		return new RailsContainer(rails);
 	}
