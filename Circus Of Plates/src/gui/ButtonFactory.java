@@ -18,9 +18,9 @@ public class ButtonFactory {
 	private static ButtonFactory buttonFactory;
 
 	private static final String[] btnName = new String[] { "New", "Pause", "Resume", "Quit", null, "Save", "Load", null,
-			"Mute", null, "Easy", "Medium", "Hard" };
+			"Mute", null, "Easy", "Medium", "Hard", null, "End System" };
 	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
-			MEDIUM = 11, HARD = 12;
+			MEDIUM = 11, HARD = 12, END_SYSTEM = 14;
 
 	public static ButtonFactory getInstance() {
 		if (buttonFactory == null) {
@@ -98,6 +98,13 @@ public class ButtonFactory {
 			break;
 		case HARD:
 			curBtn.setOnAction(e -> gameController.newGame(2));
+			break;
+		case END_SYSTEM:
+			curBtn.setOnAction(e -> {
+				gameController.pauseGame();
+				gameController.changeEndSystem();
+				gameController.resumeGame();
+			});
 			break;
 		default:
 			LOGGER.fatal("Wrong button index");

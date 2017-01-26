@@ -1,15 +1,19 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import model.AllStacksEndSystem;
+import model.EndSystemStrategy;
 import model.GameModel;
+import model.OneStackEndSystem;
 import saving.JsonWriter;
 import saving.StateBundle;
 import shapes.ShapesPool;
@@ -28,13 +32,15 @@ public class GameController extends AnimationTimer {
 	private GameModel gameModel;
 	private GraphicsDrawer graphicsDrawer;
 	private AudioController audioController;
-
+	private EndSystemStrategy endSystemStrategy;
+	
 	private boolean gameEnded;
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private int difficulty = 0;
 
 	public GameController(GraphicsDrawer graphicsDrawer) {
-		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
+		endSystemStrategy = new AllStacksEndSystem();
+		this.gameModel = new GameModel(difficulty, endSystemStrategy);
 		this.graphicsDrawer = graphicsDrawer;
 		graphicsDrawer.attachSubject(gameModel);
 		this.audioController = AudioController.getInstance();
@@ -46,18 +52,18 @@ public class GameController extends AnimationTimer {
 		if (i != difficulty) {
 			difficulty = i;
 			gameEnded = false;
-			resumeGame();
 			this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 			graphicsDrawer.attachSubject(gameModel);
+			resumeGame();
 		}
 		LOGGER.info("New game started");
 	}
 
 	public void newGame() {
 		gameEnded = false;
-		resumeGame();
 		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 		graphicsDrawer.attachSubject(gameModel);
+		resumeGame();
 	}
 
 	public void resumeGame() {
@@ -127,6 +133,22 @@ public class GameController extends AnimationTimer {
 			break;
 		default:
 			break;
+		}
+	}
+
+	public void changeEndSystem() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Change End System");
+		alert.setHeaderText("Change the End System used to anounce game over.");
+		alert.setContentText("Choose your option. You must start new game to take effect");
+		ButtonType buttonTypeOne = new ButtonType("All stacks full");
+		ButtonType buttonTypeTwo = new ButtonType("One stack full");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne){
+		    endSystemStrategy = new AllStacksEndSystem();
+		} else if (result.get() == buttonTypeTwo) {
+		    endSystemStrategy = new OneStackEndSystem();
 		}
 	}
 
