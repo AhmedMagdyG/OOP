@@ -11,14 +11,16 @@ import javafx.scene.paint.Color;
 public class ShapeFactory {
 	private static final Logger LOGGER = Logger.getLogger(ShapeFactory.class);
 
-	private static ArrayList<Constructor<?>[]> loadedShapes = null;
+	private static ArrayList<Constructor<?>[]> loadedShapes = new ArrayList<Constructor<?>[]>();
 
 	public ShapeFactory() {
 		if (loadedShapes == null) {
 			loadedShapes = new ArrayList<Constructor<?>[]>();
 		}
-		ShapeFactory.addNewShape(RectangleShape.class.getConstructors());
-		ShapeFactory.addNewShape(EllipseShape.class.getConstructors());
+	}
+	
+	public static ArrayList<Constructor<?>[]> getLoaded() {
+		return loadedShapes;
 	}
 
 	public static void addNewShape(Constructor<?>[] newShapeConstructor) {

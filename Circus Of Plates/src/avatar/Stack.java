@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
 import shapes.RectangleShape;
+import shapes.ShapeFactory;
 import shapes.ShapesPool;
 import sprite.ShapeSprite;
 import sprite.Sprite;
@@ -52,8 +53,13 @@ public class Stack {
 	}
 
 	public Sprite getSprite() {
-		return new ShapeSprite(
-				new RectangleShape(xPosition, yPosition, WIDTH, HEIGHT, getStackFillColor(), getStackStrokeColor()));
+		try {
+			return new ShapeSprite((CustomShape) ShapeFactory.getLoaded().get(0)[1].newInstance(xPosition, yPosition,
+					WIDTH, HEIGHT, getStackFillColor(), getStackStrokeColor()));
+		} catch (Exception e) {
+			System.out.println("Error");
+		}
+		return null;
 	}
 
 	public ArrayList<Sprite> getShapesSprite() {
