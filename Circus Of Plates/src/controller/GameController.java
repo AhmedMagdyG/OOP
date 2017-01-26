@@ -63,12 +63,8 @@ public class GameController extends AnimationTimer {
 		if (i != difficulty) {
 			difficulty = i;
 			gameEnded = false;
-<<<<<<< HEAD
 			gameModel.releaseAll();
-			this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
-=======
 			this.gameModel = new GameModel(difficulty, endSystemStrategy);
->>>>>>> 6ef6d643efe7294e5d362dad05b606e494bd200a
 			graphicsDrawer.attachSubject(gameModel);
 			resumeGame();
 		}
@@ -78,12 +74,8 @@ public class GameController extends AnimationTimer {
 	public void newGame() {
 		audioController.beginBackgroundMusic();
 		gameEnded = false;
-<<<<<<< HEAD
 		gameModel.releaseAll();
-		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
-=======
 		this.gameModel = new GameModel(difficulty, endSystemStrategy);
->>>>>>> 6ef6d643efe7294e5d362dad05b606e494bd200a
 		graphicsDrawer.attachSubject(gameModel);
 		resumeGame();
 	}
