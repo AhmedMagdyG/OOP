@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
@@ -17,8 +16,6 @@ import model.OneStackEndSystem;
 import saving.JsonWriter;
 import saving.StateBundle;
 import shapes.ShapesPool;
-import sprite.Sprite;
-import sprite.TextSprite;
 import view.GraphicsDrawer;
 
 public class GameController extends AnimationTimer {
@@ -26,8 +23,7 @@ public class GameController extends AnimationTimer {
 
 	private final static int FIRST_AVATAR = 0, SECOND_AVATAR = 1;
 	private final static int AVATAR_MOVED_DISTANCE = 15;
-	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
-			"The game end in tie." };
+
 
 	private static GameController gameController;
 	private GameModel gameModel;
@@ -101,14 +97,11 @@ public class GameController extends AnimationTimer {
 		}
 		gameModel.updateState();
 		handleMotion();
-		ArrayList<Sprite> sprites = gameModel.getSprites();
 		if (gameModel.gameEnded()) {
 			int winner = gameModel.getWinner();
 			pauseGame();
 			gameEnded = true;
-			sprites.add(new TextSprite(getWinMessage(winner)));
 			LOGGER.debug("Winner = " + winner);
-			LOGGER.info(getWinMessage(winner));
 		}
 	}
 
@@ -222,16 +215,6 @@ public class GameController extends AnimationTimer {
 		if (avatarTwoToRight) {
 			gameModel.movePlayer(SECOND_AVATAR, AVATAR_MOVED_DISTANCE);
 			LOGGER.info("Second player moved to right");
-		}
-	}
-
-	private String getWinMessage(int winner) {
-		if (winner > 0) {
-			return gameEnd[0];
-		} else if (winner < 0) {
-			return gameEnd[1];
-		} else {
-			return gameEnd[2];
 		}
 	}
 
