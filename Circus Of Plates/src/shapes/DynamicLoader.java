@@ -14,34 +14,30 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
-
 public class DynamicLoader {
 	private static final Logger LOGGER = Logger.getLogger(DynamicLoader.class);
 
 	private static DynamicLoader dlInstance;
 
 	private ClassLoader classLoader;
-	
+
 	private DynamicLoader() {
 	}
-	
+
 	public static DynamicLoader getInstance() {
-		if(dlInstance == null) {
+		if (dlInstance == null) {
 			dlInstance = new DynamicLoader();
 		}
 		return dlInstance;
 	}
-	
+
 	public ArrayList<Constructor<?>[]> initialize() {
 		Properties prop = new Properties();
 		InputStream input = null;
 		ArrayList<Constructor<?>[]> ret = new ArrayList<Constructor<?>[]>();
 		try {
-
 			input = new FileInputStream("config.properties");
-
 			prop.load(input);
-
 			Constructor<?>[] cons1 = loadClass(prop.getProperty("firstClass"));
 			Constructor<?>[] cons2 = loadClass(prop.getProperty("secondClass"));
 			ret.add(cons1);
@@ -49,7 +45,6 @@ public class DynamicLoader {
 			return ret;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			System.out.println("HERe");
 		} finally {
 			if (input != null) {
 				try {
@@ -73,7 +68,6 @@ public class DynamicLoader {
 			classLoader = new URLClassLoader(urls);
 			Class<?> cls = classLoader.loadClass("shapes." + newClass);
 			LOGGER.info("Successful class loading");
-			System.out.println("HERE");
 			return cls.getConstructors();
 		} catch (MalformedURLException | ClassNotFoundException e) {
 			LOGGER.error("Unsuccessful class loading");

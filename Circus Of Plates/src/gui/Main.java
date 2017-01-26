@@ -79,15 +79,15 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		try {
+			configureLogger();
+		} catch (IOException e) {
+			System.out.println("Couldn't Initialise Log4J");
+		}
 		DynamicLoader dl = DynamicLoader.getInstance();
 		ArrayList<Constructor<?>[]> loades = dl.initialize();
 		ShapeFactory.addNewShape(loades.get(0));
 		ShapeFactory.addNewShape(loades.get(1));
-		try {
-			configureLogger();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		LOGGER.info("Game started");
 		launch(args);
 	}
