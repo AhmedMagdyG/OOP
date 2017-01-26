@@ -64,7 +64,8 @@ public class Main extends Application {
 
 	void initialiseGame(Canvas gameCanvas) {
 		graphicsDrawer = new GraphicsDrawer(gameCanvas);
-		gameController = new GameController(graphicsDrawer);
+		gameController = GameController.getInstance();
+		gameController.setGraphicsDrawer(graphicsDrawer);
 	}
 
 	void setStageProperties(Stage gameStage, Scene gameScene) {

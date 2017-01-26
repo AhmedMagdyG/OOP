@@ -29,6 +29,7 @@ public class GameController extends AnimationTimer {
 	private static final String[] gameEnd = { "The First Player Won the game.", "The Second Player Won the game.",
 			"The game end in tie." };
 
+	private static GameController gameController;
 	private GameModel gameModel;
 	private GraphicsDrawer graphicsDrawer;
 	private AudioController audioController;
@@ -38,7 +39,17 @@ public class GameController extends AnimationTimer {
 	private boolean avatarOneToleft, avatarOneToRight, avatarTwoToLeft, avatarTwoToRight;
 	private int difficulty = 0;
 
-	public GameController(GraphicsDrawer graphicsDrawer) {
+	private GameController() {
+	}
+
+	public static GameController getInstance() {
+		if(gameController == null){
+			gameController = new GameController();
+		}
+		return gameController;
+	}
+	
+	public void setGraphicsDrawer(GraphicsDrawer graphicsDrawer){
 		endSystemStrategy = new AllStacksEndSystem();
 		this.gameModel = new GameModel(difficulty, endSystemStrategy);
 		this.graphicsDrawer = graphicsDrawer;

@@ -1,6 +1,7 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -38,9 +39,9 @@ public class GameLayout extends SplitPane {
 	private void initialiseToolbarPane(GameController gameController) {
 		toolbarPane = new StackPane();
 		toolbar = new ToolBar();
-		ButtonFactory buttonFactory = ButtonFactory.getInstance();
-		for (int index = 0; index < buttonFactory.getNodeCount(); index++) {
-			toolbarNodes.add(buttonFactory.createNode(index, gameController));
+		Iterator<Node> nodeIter = ButtonContainer.getInstance().getIterator();
+		while (nodeIter.hasNext()) {
+			toolbarNodes.add(nodeIter.next());
 		}
 		toolbar.getItems().addAll(toolbarNodes);
 		toolbarPane.getChildren().add(toolbar);
