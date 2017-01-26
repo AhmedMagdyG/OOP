@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -12,71 +13,64 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.stage.FileChooser;
 
-public class ButtonFactory {
-	private static final Logger LOGGER = Logger.getLogger(ButtonFactory.class);
+public class ButtonContainer {
+	private static final Logger LOGGER = Logger.getLogger(ButtonContainer.class);
 
-	private static ButtonFactory buttonFactory;
+	private static ButtonContainer buttonContainer;
 
 	private static final String[] btnName = new String[] { "New", "Pause", "Resume", "Quit", null, "Save", "Load", null,
 			"Mute", null, "Easy", "Medium", "Hard", null, "End System" };
 	private static final int NEW = 0, PAUSE = 1, RESUME = 2, QUIT = 3, SAVE = 5, LOAD = 6, MUTE = 8, EASY = 10,
 			MEDIUM = 11, HARD = 12, END_SYSTEM = 14;
 
-	public static ButtonFactory getInstance() {
-		if (buttonFactory == null) {
-			buttonFactory = new ButtonFactory();
+	public static ButtonContainer getInstance() {
+		if (buttonContainer == null) {
+			buttonContainer = new ButtonContainer();
 		}
-		return buttonFactory;
-	}
-
-	public int getNodeCount() {
-		return btnName.length;
+		return buttonContainer;
 	}
 
 	private boolean isSeparator(int index) {
 		return btnName[index] == null;
 	}
 
-	public Node createNode(int index, GameController gameController) {
-		if (isSeparator(index)) {
-			return new Separator();
-		}
-		return createButton(index, gameController);
+	public Iterator<Node> getIterator() {
+		return new ButtonIterator();
 	}
 
-	private Node createButton(int index, GameController gameController) {
+	private Node createButton(int index) {
 		Button curBtn = new Button(btnName[index]);
 		switch (index) {
 		case NEW:
-			curBtn.setOnAction(e -> gameController.newGame());
+			curBtn.setOnAction(e -> GameController.getInstance().newGame());
 			break;
 		case PAUSE:
-			curBtn.setOnAction(e -> gameController.pauseGame());
+			curBtn.setOnAction(e -> GameController.getInstance().pauseGame());
 			break;
 		case RESUME:
-			curBtn.setOnAction(e -> gameController.resumeGame());
+			curBtn.setOnAction(e -> GameController.getInstance().resumeGame());
 			break;
 		case QUIT:
 			curBtn.setOnAction(e -> Platform.exit());
 			break;
 		case SAVE:
 			curBtn.setOnAction(e -> {
-				gameController.pauseGame();
+				GameController.getInstance().pauseGame();
 				FileChooser chooser = new FileChooser();
 				chooser.setTitle("Load game");
 				File saveFile = chooser.showSaveDialog(null);
 				if (saveFile != null)
-					gameController.save(saveFile.toPath().toString());
+					GameController.getInstance().save(saveFile.toPath().toString());
 			});
 			break;
 		case LOAD:
 			curBtn.setOnAction(e -> {
-				gameController.pauseGame();
+				GameController.getInstance().pauseGame();
 				FileChooser chooser = new FileChooser();
 				chooser.setTitle("Load game");
 				File loadFile = chooser.showOpenDialog(null);
 				if (loadFile != null)
-					gameController.load(loadFile.toPath().toString());
+					GameController.getInstance().load(loadFile.toPath().toString());
 			});
 			break;
 		case MUTE:
@@ -91,19 +85,19 @@ public class ButtonFactory {
 			});
 			break;
 		case EASY:
-			curBtn.setOnAction(e -> gameController.newGame(0));
+			curBtn.setOnAction(e -> GameController.getInstance().newGame(0));
 			break;
 		case MEDIUM:
-			curBtn.setOnAction(e -> gameController.newGame(1));
+			curBtn.setOnAction(e -> GameController.getInstance().newGame(1));
 			break;
 		case HARD:
-			curBtn.setOnAction(e -> gameController.newGame(2));
+			curBtn.setOnAction(e -> GameController.getInstance().newGame(2));
 			break;
 		case END_SYSTEM:
 			curBtn.setOnAction(e -> {
-				gameController.pauseGame();
-				gameController.changeEndSystem();
-				gameController.resumeGame();
+				GameController.getInstance().pauseGame();
+				GameController.getInstance().changeEndSystem();
+				GameController.getInstance().resumeGame();
 			});
 			break;
 		default:
@@ -112,5 +106,34 @@ public class ButtonFactory {
 		}
 		LOGGER.debug(btnName[index] + " button created");
 		return curBtn;
+	}
+
+	private class ButtonIterator implements Iterator<Node> {
+
+		int index;
+
+		public boolean hasNext() {
+			if (index < btnName.length) {
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public Node next() {
+			if (this.hasNext()) {
+				Node curNode = createNode();
+				index++;
+				return curNode;
+			}
+			return null;
+		}
+
+		private Node createNode() {
+			if (isSeparator(index)) {
+				return new Separator();
+			}
+			return createButton(index);
+		}
 	}
 }

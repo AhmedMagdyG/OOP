@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import javafx.scene.paint.Color;
 import shapes.CustomShape;
-import shapes.RectangleShape;
 import shapes.ShapeFactory;
 import shapes.ShapesPool;
 import sprite.ShapeSprite;
