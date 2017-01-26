@@ -57,13 +57,20 @@ public class StateBundle implements Serializable {
 		}
 	}
 
+	private int getShapeType(CustomShape x) {
+		if (x.getClass().getSimpleName().equals("RectangleShape"))
+			return 0;
+		return 1;
+	}
+
 	private ArrayList<FakeShape> getShapes(List<CustomShape> shapes) {
 		ArrayList<FakeShape> fakeShapes = new ArrayList<FakeShape>();
 		for (int i = 0; i < shapes.size(); i++) {
-			FakeShape fakeShape = new FakeShape(shapes.get(i).getFillColor(), shapes.get(i).getFillColor(),
-					shapes.get(i).getXPosition(), shapes.get(i).getYPosition(), shapes.get(i).getXVelocity(),
-					shapes.get(i).getYVelocity(), shapes.get(i).getIsCaught(), shapes.get(i).getWidth(),
-					shapes.get(i).getHeight());
+			FakeShape fakeShape = new FakeShape(shapes.get(i).getXPosition(), shapes.get(i).getYPosition(),
+					shapes.get(i).getXVelocity(), shapes.get(i).getYVelocity(), shapes.get(i).getIsCaught(),
+					shapes.get(i).getWidth(), shapes.get(i).getHeight(), getShapeType(shapes.get(i)),
+					shapes.get(i).getFillColor().getRed(), shapes.get(i).getFillColor().getGreen(),
+					shapes.get(i).getFillColor().getBlue());
 			fakeShapes.add(fakeShape);
 		}
 		return fakeShapes;
@@ -72,10 +79,11 @@ public class StateBundle implements Serializable {
 	private void initializeShapesInUse(List<CustomShape> shapesInUse) {
 		this.shapesInUse = new ArrayList<FakeShape>();
 		for (int i = 0; i < shapesInUse.size(); i++) {
-			FakeShape fakeShape = new FakeShape(shapesInUse.get(i).getFillColor(), shapesInUse.get(i).getStrokeColor(),
-					shapesInUse.get(i).getXPosition(), shapesInUse.get(i).getYPosition(),
+			FakeShape fakeShape = new FakeShape(shapesInUse.get(i).getXPosition(), shapesInUse.get(i).getYPosition(),
 					shapesInUse.get(i).getXVelocity(), shapesInUse.get(i).getYVelocity(),
-					shapesInUse.get(i).getIsCaught(), shapesInUse.get(i).getWidth(), shapesInUse.get(i).getHeight());
+					shapesInUse.get(i).getIsCaught(), shapesInUse.get(i).getWidth(), shapesInUse.get(i).getHeight(),
+					getShapeType(shapesInUse.get(i)), shapesInUse.get(i).getFillColor().getRed(),
+					shapesInUse.get(i).getFillColor().getGreen(), shapesInUse.get(i).getFillColor().getBlue());
 			this.shapesInUse.add(fakeShape);
 		}
 	}
@@ -94,9 +102,10 @@ public class StateBundle implements Serializable {
 		ArrayList<FakeShape> fake = new ArrayList<FakeShape>();
 		for (int i = 0; i < shapes.size(); i++) {
 			ShapeSprite shapeSprite = (ShapeSprite) shapes.get(i);
-			FakeShape fakeShape = new FakeShape((Color) shapeSprite.getColor(), shapeSprite.getStrokeColor(),
-					(double) shapeSprite.getX(), (double) shapeSprite.getY(), 0, 0, true, shapeSprite.getWidth(),
-					shapeSprite.getHeight());
+			CustomShape cs = shapeSprite.getCustomShape();
+			FakeShape fakeShape = new FakeShape((double) shapeSprite.getX(), (double) shapeSprite.getY(), 0, 0, true,
+					shapeSprite.getWidth(), shapeSprite.getHeight(), getShapeType(cs), shapeSprite.getColor().getRed(),
+					shapeSprite.getColor().getGreen(), shapeSprite.getColor().getBlue());
 			fake.add(fakeShape);
 		}
 		this.firstPlayerStack[index] = new FakeStack(firstPlayerStack[index].getScore(), firstPlayerStack[index].getX(),
@@ -109,9 +118,10 @@ public class StateBundle implements Serializable {
 		ArrayList<FakeShape> fake = new ArrayList<FakeShape>();
 		for (int i = 0; i < shapes.size(); i++) {
 			ShapeSprite shapeSprite = (ShapeSprite) shapes.get(i);
-			FakeShape fakeShape = new FakeShape((Color) shapeSprite.getColor(), shapeSprite.getStrokeColor(),
-					(double) shapeSprite.getX(), (double) shapeSprite.getY(), 0, 0, true, shapeSprite.getWidth(),
-					shapeSprite.getHeight());
+			CustomShape cs = shapeSprite.getCustomShape();
+			FakeShape fakeShape = new FakeShape((double) shapeSprite.getX(), (double) shapeSprite.getY(), 0, 0, true,
+					shapeSprite.getWidth(), shapeSprite.getHeight(), getShapeType(cs), shapeSprite.getColor().getRed(),
+					shapeSprite.getColor().getGreen(), shapeSprite.getColor().getBlue());
 			fake.add(fakeShape);
 		}
 		this.secondPlayerStack[index] = new FakeStack(secondPlayerStack[index].getScore(),
@@ -123,9 +133,12 @@ public class StateBundle implements Serializable {
 	public ArrayList<CustomShape> getInUse() {
 		ArrayList<CustomShape> retInUse = new ArrayList<CustomShape>();
 		for (int i = 0; i < this.shapesInUse.size(); i++) {
+			double r = shapesInUse.get(i).getR();
+			double g = shapesInUse.get(i).getG();
+			double b = shapesInUse.get(i).getB();
 			CustomShape customShape = new RectangleShape((int) shapesInUse.get(i).getYPos(),
 					(int) shapesInUse.get(i).getYPos(), shapesInUse.get(i).getWidth(), shapesInUse.get(i).getHeight(),
-					shapesInUse.get(i).getFillColor(), shapesInUse.get(i).getStrokeColor());
+					new Color(r, g, b, 1), Color.BLACK);
 			retInUse.add(customShape);
 		}
 		return retInUse;
@@ -158,9 +171,11 @@ public class StateBundle implements Serializable {
 		ArrayList<Sprite> retShapes = new ArrayList<Sprite>();
 		ArrayList<FakeShape> loaded = new ArrayList<FakeShape>(firstPlayerStack[ind].getShapes());
 		for (int i = 0; i < loaded.size(); i++) {
+			double r = loaded.get(i).getR();
+			double g = loaded.get(i).getG();
+			double b = loaded.get(i).getB();
 			CustomShape customShape = new RectangleShape((int) loaded.get(i).getXPos(), (int) loaded.get(i).getYPos(),
-					loaded.get(i).getWidth(), loaded.get(i).getHeight(), loaded.get(i).getFillColor(),
-					loaded.get(i).getStrokeColor());
+					loaded.get(i).getWidth(), loaded.get(i).getHeight(), new Color(r, g, b, 1), Color.BLACK);
 			retShapes.add(new ShapeSprite(customShape));
 		}
 		StackState state;
@@ -177,9 +192,11 @@ public class StateBundle implements Serializable {
 		ArrayList<Sprite> retShapes = new ArrayList<Sprite>();
 		ArrayList<FakeShape> loaded = new ArrayList<FakeShape>(secondPlayerStack[ind].getShapes());
 		for (int i = 0; i < loaded.size(); i++) {
+			double r = loaded.get(i).getR();
+			double g = loaded.get(i).getG();
+			double b = loaded.get(i).getB();
 			CustomShape customShape = new RectangleShape((int) loaded.get(i).getXPos(), (int) loaded.get(i).getYPos(),
-					loaded.get(i).getWidth(), loaded.get(i).getHeight(), loaded.get(i).getFillColor(),
-					loaded.get(i).getStrokeColor());
+					loaded.get(i).getWidth(), loaded.get(i).getHeight(), new Color(r, g, b, 1), Color.BLACK);
 			retShapes.add(new ShapeSprite(customShape));
 		}
 		StackState state;
@@ -202,9 +219,12 @@ public class StateBundle implements Serializable {
 			List<CustomShape> shapes = new ArrayList<CustomShape>();
 			ArrayList<FakeShape> fakeShapes = new ArrayList<FakeShape>(fakeRails.get(i).getShapes());
 			for (int j = 0; j < fakeShapes.size(); j++) {
+				double r = fakeShapes.get(j).getR();
+				double g = fakeShapes.get(j).getG();
+				double b = fakeShapes.get(j).getB();
 				CustomShape cs = new RectangleShape((int) fakeShapes.get(j).getXPos(),
 						(int) fakeShapes.get(j).getYPos(), fakeShapes.get(j).getWidth(), fakeShapes.get(j).getHeight(),
-						fakeShapes.get(j).getFillColor(), fakeShapes.get(j).getStrokeColor());
+						new Color(r, g, b, 1), Color.BLACK);
 				shapes.add(cs);
 			}
 			Rail rail = new Rail(fakeRails.get(i).getDir(), fakeRails.get(i).getPos(), fakeRails.get(i).getHeight(),

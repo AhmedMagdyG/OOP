@@ -44,6 +44,28 @@ public class GameModel implements Observable {
 		initialiseRails();
 		LOGGER.info("Game Model Created");
 	}
+	
+	public GameModel(int difficulty, Avatar[] avatars2, ArrayList<CustomShape> inUse,
+ 			RailsContainer railsContainer) {
+			releaseAvatars();
+			releaseShapes();
+		this.prevCycleTime = System.currentTimeMillis();
+		this.railsContainer = railsContainer;
+		this.shapesController = new ShapesController(this.railsContainer);
+		initialiseAvatars(avatars2);
+		initialiseDifficulty(difficulty);
+ 	}
+	
+	private void initialiseAvatars(Avatar[] avatars2) {
+		initialiseAvatars();
+		for(int i = 0; i < 2; i++){
+			Avatar curAvatar = this.avatars.get(i);
+			Avatar newAvatar = avatars2[i];
+			curAvatar.setX(newAvatar.getX());
+			curAvatar.setY(newAvatar.getY());
+			curAvatar.setStack(newAvatar.getStack());
+		}
+	}
 
 	public RailsContainer getRailsContainer() {
 		return railsContainer;

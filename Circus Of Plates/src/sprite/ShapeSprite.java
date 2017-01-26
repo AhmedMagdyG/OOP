@@ -33,7 +33,7 @@ public class ShapeSprite extends Sprite {
 		shape.setXPostion(x);
 	}
 
-	public Object getColor() {
+	public Color getColor() {
 		return shape.getFillColor();
 	}
 

@@ -1,18 +1,17 @@
 package saving;
 
-import javafx.scene.paint.Color;
-
 public class FakeShape {
 
-	private Color fillColor, strokeColor;
 	private double xPos, yPos;
 	private double xVel, yVel;
 	private boolean isCaught;
 	private int width, height;
+	private int shapeType;
+	private double r, g, b;
+	
 
-	public FakeShape(Color fillColor, Color strokeColor, double xPos, double yPos, double xVel, double yVel,
-			boolean isCaught, int width, int height) {
-		this.fillColor = fillColor;
+	public FakeShape(double xPos, double yPos, double xVel, double yVel,
+			boolean isCaught, int width, int height, int shapeType, double r, double g, double b) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.xVel = xVel;
@@ -20,15 +19,13 @@ public class FakeShape {
 		this.isCaught = isCaught;
 		this.width = width;
 		this.height = height;
+		this.shapeType = shapeType;
+		this.r = r;
+		this.g = g;
+		this.b = b;
 	}
 	
-	public Color getFillColor() {
-		return this.fillColor;
-	}
-	
-	public Color getStrokeColor() {
-		return this.strokeColor;
-	}
+
 	
 	public double getXPos() {
 		return this.xPos;
@@ -57,4 +54,21 @@ public class FakeShape {
 	public int getHeight() {
 		return this.height;
 	}
+	
+	public int getShape() {
+		return this.shapeType;
+	}
+	
+	public double getR() {
+		return this.r; 
+	}
+	
+	public double getG() {
+		return this.g;
+	}
+	
+	public double getB() {
+		return this.b;
+	}
+	
 }
