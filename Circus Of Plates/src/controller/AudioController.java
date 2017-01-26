@@ -54,4 +54,9 @@ public class AudioController {
 		player.setMute(false);
 		LOGGER.info("Back ground music unmuted");
 	}
+
+	public void beginBackgroundMusic() {
+		player.stop();
+		player.play();
+	}
 }
