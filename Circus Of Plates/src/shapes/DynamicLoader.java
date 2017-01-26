@@ -9,10 +9,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
+
+import model.Paths;
 
 public class DynamicLoader {
 	private static final Logger LOGGER = Logger.getLogger(DynamicLoader.class);
@@ -32,29 +36,29 @@ public class DynamicLoader {
 	}
 
 	public ArrayList<Constructor<?>[]> initialize() {
-		Properties prop = new Properties();
-		InputStream input = null;
 		ArrayList<Constructor<?>[]> ret = new ArrayList<Constructor<?>[]>();
 		try {
-			input = new FileInputStream("config.properties");
-			prop.load(input);
-			Constructor<?>[] cons1 = loadClass(prop.getProperty("firstClass"));
-			Constructor<?>[] cons2 = loadClass(prop.getProperty("secondClass"));
-			ret.add(cons1);
-			ret.add(cons2);
+			String[] paths = getShapesPaths();
+			for (String path : paths) {
+				ret.add(loadClass(path));
+			}
 			return ret;
 		} catch (Exception ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			LOGGER.fatal("Couldn't initialize Dymamic loading");
 		}
 		return null;
+	}
+
+	private String[] getShapesPaths() {
+		File shapesFile = new File(Paths.RESOURCE_PATH + File.separator + "Shapes");
+		List<String> paths = new LinkedList<>();
+		File[] temp = shapesFile.listFiles();
+		for (File file : temp) {
+			if (file.getName().endsWith(".jar")) {
+				paths.add(file.getPath());
+			}
+		}
+		return paths.toArray(new String[0]);
 	}
 
 	private Constructor<?>[] loadClass(String path) {
