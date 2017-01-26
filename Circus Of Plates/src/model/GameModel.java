@@ -91,6 +91,11 @@ public class GameModel implements Observable {
 		return avatars.get(0).getScore() - avatars.get(1).getScore();
 	}
 
+	public void releaseAll(){
+		releaseShapes();
+		releaseAvatars();
+	}
+	
 	private void initialiseDifficulty(int difficulty) {
 		switch (difficulty) {
 		case EASY:

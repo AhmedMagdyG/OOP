@@ -63,6 +63,7 @@ public class GameController extends AnimationTimer {
 		if (i != difficulty) {
 			difficulty = i;
 			gameEnded = false;
+			gameModel.releaseAll();
 			this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 			graphicsDrawer.attachSubject(gameModel);
 			resumeGame();
@@ -72,6 +73,7 @@ public class GameController extends AnimationTimer {
 
 	public void newGame() {
 		gameEnded = false;
+		gameModel.releaseAll();
 		this.gameModel = new GameModel(difficulty, new AllStacksEndSystem());
 		graphicsDrawer.attachSubject(gameModel);
 		resumeGame();
