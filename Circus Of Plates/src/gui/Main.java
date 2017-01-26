@@ -3,6 +3,8 @@ package gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -16,6 +18,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import shapes.DynamicLoader;
+import shapes.ShapeFactory;
 import view.GraphicsDrawer;
 
 public class Main extends Application {
@@ -75,6 +79,10 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		DynamicLoader dl = DynamicLoader.getInstance();
+		ArrayList<Constructor<?>[]> loades = dl.initialize();
+		ShapeFactory.addNewShape(loades.get(0));
+		ShapeFactory.addNewShape(loades.get(1));
 		try {
 			configureLogger();
 		} catch (IOException e) {

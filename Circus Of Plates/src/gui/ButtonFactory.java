@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import controller.AudioController;
@@ -8,6 +10,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.stage.FileChooser;
 
 public class ButtonFactory {
 	private static final Logger LOGGER = Logger.getLogger(ButtonFactory.class);
@@ -60,6 +63,14 @@ public class ButtonFactory {
 			curBtn.setOnAction(e -> gameController.save("C:\\Users\\user\\Desktop"));
 			break;
 		case LOAD:
+			curBtn.setOnAction(e -> {
+				gameController.pauseGame();
+				FileChooser chooser = new FileChooser();
+				chooser.setTitle("Load game");
+				File loadFile = chooser.showOpenDialog(null);
+				if (loadFile != null)
+					gameController.load(loadFile.toPath().toString());
+			});
 			curBtn.setOnAction(e -> gameController.load("C:\\Users\\user\\Desktop\\yarab.json"));
 			break;
 		case MUTE:
