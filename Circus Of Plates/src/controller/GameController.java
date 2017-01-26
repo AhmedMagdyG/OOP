@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
+import avatar.FullStack;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -197,13 +198,19 @@ public class GameController extends AnimationTimer {
 
 	private void setGameState(StateBundle stateBundle) {
 		this.difficulty = stateBundle.getDifficulty();
+		EndSystemStrategy state;
+		if(stateBundle.getState() == 1)
+			state = new AllStacksEndSystem();
+		else
+			state = new OneStackEndSystem();
 		gameModel = new GameModel(this.difficulty, stateBundle.getAvatar(), stateBundle.getInUse(),
-				stateBundle.getRailsContainer());
+				stateBundle.getRailsContainer(), state);
+		graphicsDrawer.attachSubject(gameModel);
 	}
 
 	private StateBundle getGameState() {
 		StateBundle b = new StateBundle(gameModel.getAvatars().get(0), gameModel.getAvatars().get(1),
-				ShapesPool.getInstance().getInUse(), this.difficulty, gameModel.getRailsContainer());
+				ShapesPool.getInstance().getInUse(), this.difficulty, gameModel.getRailsContainer(), gameModel.getEndStrategy());
 		return b;
 	}
 

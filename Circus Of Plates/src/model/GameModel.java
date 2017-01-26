@@ -46,7 +46,7 @@ public class GameModel implements Observable {
 	}
 	
 	public GameModel(int difficulty, Avatar[] avatars2, ArrayList<CustomShape> inUse,
- 			RailsContainer railsContainer) {
+ 			RailsContainer railsContainer, EndSystemStrategy endSystemStrategy) {
 			releaseAvatars();
 			releaseShapes();
 		this.prevCycleTime = System.currentTimeMillis();
@@ -54,6 +54,8 @@ public class GameModel implements Observable {
 		this.shapesController = new ShapesController(this.railsContainer);
 		initialiseAvatars(avatars2);
 		initialiseDifficulty(difficulty);
+		this.endSystemStrategy = endSystemStrategy;
+		LOGGER.info("Game Model Created");
  	}
 	
 	private void initialiseAvatars(Avatar[] avatars2) {
@@ -193,5 +195,11 @@ public class GameModel implements Observable {
 	public void updateState() {
 		moveShapes();
 		notifyObserver();
+	}
+
+	public int getEndStrategy() {
+		if(endSystemStrategy instanceof AllStacksEndSystem)
+			return 1;
+		return 0;
 	}
 }

@@ -7,11 +7,11 @@ public class FakeShape {
 	private boolean isCaught;
 	private int width, height;
 	private int shapeType;
-	private double r, g, b;
+	private int colorInd;
 	
 
 	public FakeShape(double xPos, double yPos, double xVel, double yVel,
-			boolean isCaught, int width, int height, int shapeType, double r, double g, double b) {
+			boolean isCaught, int width, int height, int shapeType, int colorInd) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.xVel = xVel;
@@ -20,9 +20,7 @@ public class FakeShape {
 		this.width = width;
 		this.height = height;
 		this.shapeType = shapeType;
-		this.r = r;
-		this.g = g;
-		this.b = b;
+		this.colorInd = colorInd;
 	}
 	
 
@@ -59,16 +57,8 @@ public class FakeShape {
 		return this.shapeType;
 	}
 	
-	public double getR() {
-		return this.r; 
-	}
-	
-	public double getG() {
-		return this.g;
-	}
-	
-	public double getB() {
-		return this.b;
+	public int getColorInd() {
+		return this.colorInd; 
 	}
 	
 }

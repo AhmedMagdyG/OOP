@@ -43,6 +43,7 @@ public class Stack {
 		this.playerIndex = ind;
 		this.shapes = new ArrayList<Sprite>(shapes);
 		this.state = state;
+		this.heightSum = height;
 	}
 
 	public void setX(int x) {
@@ -183,5 +184,13 @@ public class Stack {
 
 	public boolean checkStackFull() {
 		return (state instanceof FullStack);
+	}
+
+	public void initializeState() {
+		if(heightSum < 100) 
+			state = new FullStack();
+		else 
+			state = new EmptyStack();
+		updateList();
 	}
 }

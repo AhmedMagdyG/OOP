@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public class ShapeGenerator {
 	private static final Logger LOGGER = Logger.getLogger(ShapeGenerator.class);
 
-	private ArrayList<Color> colors;
+	private static ArrayList<Color> colors;
 
 	private ShapeFactory shapeFactory;
 
@@ -22,8 +22,9 @@ public class ShapeGenerator {
 	private void initializeColors() {
 		colors = new ArrayList<Color>();
 		colors.add(Color.RED);
-		colors.add(Color.BLUEVIOLET);
+		colors.add(Color.BLUE);
 		colors.add(Color.GREEN);
+		colors.add(Color.CYAN);
 	}
 
 	public void addColor(Color newColor) {
@@ -46,6 +47,18 @@ public class ShapeGenerator {
 			LOGGER.fatal("Random Shape is null");
 		}
 		return reqShape;
+	}
+
+	public static Color getColor(int i) {
+		return colors.get(i);
+	}
+
+	public static int getInd(Color c) {
+		for (int i = 0; i < colors.size(); i++) {
+			if (colors.get(i).equals(c))
+				return i;
+		}
+		return 0;
 	}
 
 }
