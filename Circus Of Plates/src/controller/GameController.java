@@ -71,6 +71,7 @@ public class GameController extends AnimationTimer {
 	}
 
 	public void newGame() {
+		audioController.beginBackgroundMusic();
 		gameEnded = false;
 		this.gameModel = new GameModel(difficulty, endSystemStrategy);
 		graphicsDrawer.attachSubject(gameModel);
