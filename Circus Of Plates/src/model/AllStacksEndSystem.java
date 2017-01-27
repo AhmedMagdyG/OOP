@@ -17,7 +17,7 @@ public class AllStacksEndSystem implements EndSystemStrategy {
 	public boolean gameEnded(List<Avatar> avatars) {
 		for (Avatar avatar : avatars) {
 			if (!avatar.checkStackFull()) {
-				LOGGER.info("A stack is not full yet.. game ended");
+				LOGGER.info("A stack is not full yet");
 				return false;
 			}
 		}
