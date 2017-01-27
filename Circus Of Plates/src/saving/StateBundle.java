@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.jersey.samples.jaxb.Main;
-
 import avatar.Avatar;
 import avatar.EmptyStack;
 import avatar.FullStack;
 import avatar.Stack;
 import avatar.StackState;
+import gui.Main;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import shapes.CustomShape;

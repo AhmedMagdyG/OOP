@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.sun.jersey.samples.jaxb.Main;
-
+import gui.Main;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

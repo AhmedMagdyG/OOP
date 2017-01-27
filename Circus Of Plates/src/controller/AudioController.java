@@ -4,8 +4,7 @@ import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 
-import com.sun.jersey.samples.jaxb.Main;
-
+import gui.Main;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 

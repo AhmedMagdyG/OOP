@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.sun.jersey.samples.jaxb.Main;
 
 import avatar.Avatar;
 import controller.ShapesController;
+import gui.Main;
 import javafx.scene.image.Image;
 import rail.Rail;
 import rail.RailsContainer;

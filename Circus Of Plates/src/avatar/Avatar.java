@@ -5,8 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import com.sun.jersey.samples.jaxb.Main;
-
+import gui.Main;
 import javafx.scene.image.Image;
 import shapes.CustomShape;
 import sprite.AvatarSprite;
